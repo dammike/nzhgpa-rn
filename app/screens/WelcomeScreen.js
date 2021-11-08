@@ -5,7 +5,7 @@ import AppButton from '../components/AppButton';
 import AppText from '../components/AppText';
 import colors from '../config/colors';
 
-export default function WelcomeScreen(props) {
+export default function WelcomeScreen({ navigation }) {
     return (
         <ImageBackground
             blurRadius={3}
@@ -17,8 +17,8 @@ export default function WelcomeScreen(props) {
                 <AppText style={styles.tagLine}>NEW ZEALAND HANG GLIDING &amp; PARAGLIDING ASSOCIATION</AppText>
             </View>
 
-            <AppButton title="LOGIN" onPress={() => console.log('login')} />
-            <AppButton title="REGISTER" backgroundColor={colors.secondary} onPress={() => console.log('register')} />
+            <AppButton title="LOGIN" onPress={() => navigation.navigate('Login')} />
+            <AppButton title="REGISTER" backgroundColor={colors.secondary} onPress={() => navigation.navigate('Register')} />
         </ImageBackground>
     )
 }
