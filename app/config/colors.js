@@ -3,4 +3,5 @@ export default {
     secondary: 'tomato',
     white: '#fff',
     black: '#000',
+    grey: '#eee',
 }

@@ -17,8 +17,8 @@ export default function WelcomeScreen(props) {
                 <AppText style={styles.tagLine}>NEW ZEALAND HANG GLIDING &amp; PARAGLIDING ASSOCIATION</AppText>
             </View>
 
-            <AppButton title="LOGIN" style={styles.loginBtn} />
-            <AppButton title="REGISTER" style={styles.registerBtn} />
+            <AppButton title="LOGIN" onPress={() => console.log('login')} />
+            <AppButton title="REGISTER" backgroundColor={colors.secondary} onPress={() => console.log('register')} />
         </ImageBackground>
     )
 }
@@ -29,9 +29,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'flex-end',
     },
-    loginBtn: {
-        backgroundColor: colors.primary,
-    },
+
     logo: {
         height: 120,
         // aspectRatio: 6 / 3,
@@ -42,9 +40,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         position: 'absolute',
         top: 50,
-    },
-    registerBtn: {
-        backgroundColor: colors.secondary,
     },
     tagLine: {
         color: colors.white,
