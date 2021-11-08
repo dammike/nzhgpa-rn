@@ -11,5 +11,6 @@ npm-debug.*
 web-build/
 jsconfig.json
 prettier.js
+package-lock.json
 # macOS
 .DS_Store
