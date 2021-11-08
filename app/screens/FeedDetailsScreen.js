@@ -11,7 +11,10 @@ export default function FeedDetailsScreen() {
             <ScrollView>
                 <ImageBackground source={require('../assets/card-banner.jpg')} style={styles.image} />
 
-                <ListItem />
+                <ListItem
+                    image={require('../assets/profile.jpeg')}
+                    title="porttitor volutpat lorem, eu congue urna finibus nec"
+                    description="Nunc faucibus lacus dui, vitae aliquam nunc euismod eu. Aenean scelerisque dolor eu rutrum auctor. Proin in lobortis dolor. Nullam auctor felis nec turpis egestas vestibulum. Nam sapien turpis, sollicitudin pharetra sollicitudin vitae, iaculis quis justo. Suspendisse consectetur justo sit amet molestie finibus. Integer sagittis eleifend est non efficitur. Suspendisse neque lorem, consectetur eget odio quis, condimentum venena" />
 
                 <View style={styles.articleContainer}>
                     <AppText style={styles.articleText}>

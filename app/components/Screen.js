@@ -1,6 +1,7 @@
 import React from 'react';
 import { SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { Platform } from 'react-native';
+import colors from '../config/colors';
 
 export default function Screen({ children }) {
     return (

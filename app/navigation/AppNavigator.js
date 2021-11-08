@@ -37,18 +37,11 @@ const AppNavigator = () => (
                     <MaterialCommunityIcons name='crosshairs-gps' color={colors.white} size={30} />
             }} />
         <Tab.Screen
-            name='SETTINGS'
-            component={SettingsScreen} options={{
+            name='UPLOAD'
+            component={ContributeScreen} options={{
                 headerShown: false,
                 tabBarIcon: () =>
-                    <MaterialCommunityIcons name='content-save-cog' color={colors.white} size={30} />
-            }} />
-        <Tab.Screen
-            name='DOWNLOADS'
-            component={DownloadsScreen} options={{
-                headerShown: false,
-                tabBarIcon: () =>
-                    <MaterialCommunityIcons name='cloud-download' color={colors.white} size={30} />
+                    <MaterialCommunityIcons name='camera-gopro' color={colors.white} size={30} />
             }} />
         <Tab.Screen
             name='AIRS'
@@ -60,11 +53,11 @@ const AppNavigator = () => (
                     <MaterialCommunityIcons name='bandage' color={colors.white} size={30} />
             }} />
         <Tab.Screen
-            name='UPLOAD'
-            component={ContributeScreen} options={{
+            name='DOWNLOADS'
+            component={DownloadsScreen} options={{
                 headerShown: false,
                 tabBarIcon: () =>
-                    <MaterialCommunityIcons name='camera-gopro' color={colors.white} size={30} />
+                    <MaterialCommunityIcons name='cloud-download' color={colors.white} size={30} />
             }} />
         <Tab.Screen
             name='DIRECTORY'
@@ -79,6 +72,13 @@ const AppNavigator = () => (
                 headerShown: false,
                 tabBarIcon: () =>
                     <MaterialCommunityIcons name='hand-okay' color={colors.white} size={30} />
+            }} />
+        <Tab.Screen
+            name='SETTINGS'
+            component={SettingsScreen} options={{
+                headerShown: false,
+                tabBarIcon: () =>
+                    <MaterialCommunityIcons name='content-save-cog' color={colors.white} size={30} />
             }} />
     </Tab.Navigator>
 );

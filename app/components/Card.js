@@ -5,7 +5,7 @@ import ImageBackground from 'react-native/Libraries/Image/ImageBackground'
 import colors from '../config/colors'
 import AppText from './AppText'
 
-export default function Card({ description, image, onPress, title, }) {
+export default function Card({ description, image, onPress, title }) {
     return (
         <TouchableOpacity onPress={onPress}>
             <View style={styles.container}>
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.grey,
         borderRadius: 12,
         overflow: 'hidden',
-        marginBottom: 24,
+        marginBottom: 12,
     },
     description: {
         fontSize: 14,

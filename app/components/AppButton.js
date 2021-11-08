@@ -3,7 +3,7 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import colors from '../config/colors'
 import AppText from './AppText'
 
-export default function AppButton({ onPress, backgroundColor = colors.primary, title }) {
+export default function AppButton({ onPress, backgroundColor = 'dodgerblue', title }) {
     return (
         <TouchableOpacity
             onPress={onPress}

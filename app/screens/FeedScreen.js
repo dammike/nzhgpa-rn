@@ -11,8 +11,8 @@ export default function FeedScreen({ navigation }) {
                     image={require('../assets/card-banner.jpg')}
                     title="New Story"
                     description="New Story"
-                    onPress={() => navigation.navigate('FeedDetails')} />
-                <Card />
+                    onPress={() => navigation.navigate('FeedDetails')}
+                />
                 <Card />
             </ScrollView>
         </Screen>
@@ -20,4 +20,5 @@ export default function FeedScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+
 })

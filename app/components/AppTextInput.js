@@ -24,11 +24,10 @@ const styles = StyleSheet.create({
     inputContainer: {
         backgroundColor: colors.grey,
         padding: 12,
-        borderRadius: 6,
+        borderRadius: 40,
         elevation: 6,
         borderBottomColor: '#eee4',
         borderBottomWidth: 1,
-        marginVertical: 6,
         flexDirection: 'row',
         alignItems: 'center',
     }

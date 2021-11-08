@@ -4,20 +4,20 @@ import { Image, StyleSheet, View } from 'react-native'
 import colors from '../config/colors'
 import AppText from './AppText'
 
-export default function ListItem() {
+export default function ListItem({ image, title, description, style }) {
     return (
-        <View style={styles.listContainer}>
+        <View style={[styles.listContainer, style]}>
             <View style={styles.photoContainer}>
-                <Image source={require('../assets/profile.jpeg')} style={styles.image} />
+                <Image source={image} style={styles.image} />
             </View>
 
             <View style={styles.txtContainer}>
                 <AppText
                     numberOfLines={2}
-                    style={styles.title}>Paragliding Fun Comps in auckland</AppText>
+                    style={styles.title}>{title}</AppText>
                 <AppText
                     numberOfLines={2}
-                    style={styles.description}>Join in for the fun on the 27th of May 2022. Limited Spaces available. So Hurry!</AppText>
+                    style={styles.description}>{description}</AppText>
             </View>
         </View>
     )
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
     },
     title: {
-        fontSize: 16,
+        fontSize: 22,
         textTransform: 'capitalize',
         fontWeight: 'bold',
     },
@@ -55,6 +55,6 @@ const styles = StyleSheet.create({
     listContainer: {
         flexDirection: 'row',
         padding: 10,
-        backgroundColor: colors.grey,
+        backgroundColor: colors.white,
     }
 })
