@@ -9,7 +9,7 @@ export default function WelcomeScreen({ navigation }) {
     return (
         <ImageBackground
             blurRadius={3}
-            source={require('../assets/background.jpg')}
+            source={require('../assets/card-banner.jpg')}
             style={styles.background}
         >
             <View style={styles.logoContainer}>
