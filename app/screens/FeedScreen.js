@@ -1,18 +1,20 @@
 import React from 'react'
-import { Image, ImageBackground, StyleSheet, Text, View } from 'react-native'
+import { Image, ImageBackground, ScrollView, StyleSheet, Text, View } from 'react-native'
 import Card from '../components/Card'
 import Screen from '../components/Screen'
 
-export default function FeedScreen() {
+export default function FeedScreen({ navigation }) {
     return (
         <Screen>
-            <Card
-                image={require('../assets/card-banner.jpg')}
-                title="New Story"
-                description="New Story"
-                onPress={() => console.log('card pressed!')} />
-            <Card />
-            <Card />
+            <ScrollView showsVerticalScrollIndicator={false}>
+                <Card
+                    image={require('../assets/card-banner.jpg')}
+                    title="New Story"
+                    description="New Story"
+                    onPress={() => navigation.navigate('FeedDetails')} />
+                <Card />
+                <Card />
+            </ScrollView>
         </Screen>
     )
 }
