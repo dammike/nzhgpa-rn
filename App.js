@@ -16,10 +16,10 @@ export default function App() {
     // <FeedScreen />
     // <FeedDetailsScreen />
 
-    // <NavigationContainer>
-    //   <AppNavigator />
-    // </NavigationContainer>
+    <NavigationContainer>
+      <AppNavigator />
+    </NavigationContainer>
 
-    <AirsFormScreen />
+    // <AirsFormScreen />
   );
 }

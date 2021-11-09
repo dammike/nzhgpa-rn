@@ -1,17 +1,17 @@
-import React from 'react';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
-import FlyingSitesScreen from '../screens/FlyingSitesScreen';
+import React from 'react';
+import colors from '../config/colors';
+import FeedNavigator from '../navigation/FeedNavigator';
 import ContributeScreen from '../screens/ContributeScreen';
 import DirectoryScreen from '../screens/DirectoryScreen';
-import AirsScreen from '../screens/AirsScreen';
 import DownloadsScreen from '../screens/DownloadsScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import SupportScreen from '../screens/SupportScreen';
+import AirsNavigator from './AirsNavigator';
+import FlyingSitesNavigator from './FlyingSitesNavigator';
 
-import FeedNavigator from '../navigation/FeedNavigator';
-import colors from '../config/colors';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+
 
 const Tab = createBottomTabNavigator();
 const AppNavigator = () => (
@@ -20,65 +20,66 @@ const AppNavigator = () => (
         tabBarActiveTintColor: colors.white,
         tabBarInactiveBackgroundColor: colors.primary,
         tabBarInactiveTintColor: colors.white,
+        tabBarHideOnKeyboard: true,
     }}>
         <Tab.Screen
             name='Feeds'
             component={FeedNavigator}
             options={{
                 headerShown: false,
-                tabBarIcon: () =>
-                    <MaterialCommunityIcons name='newspaper-plus' color={colors.white} size={30} />
+                tabBarIcon: ({ color, size }) =>
+                    <MaterialCommunityIcons name='newspaper-plus' color={color} size={size} />
             }} />
         <Tab.Screen
             name='FLYING SITES'
-            component={FlyingSitesScreen} options={{
+            component={FlyingSitesNavigator} options={{
                 headerShown: false,
-                tabBarIcon: () =>
-                    <MaterialCommunityIcons name='crosshairs-gps' color={colors.white} size={30} />
+                tabBarIcon: ({ color, size }) =>
+                    <MaterialCommunityIcons name='racing-helmet' color={color} size={size} />
             }} />
         <Tab.Screen
             name='UPLOAD'
             component={ContributeScreen} options={{
                 headerShown: false,
-                tabBarIcon: () =>
-                    <MaterialCommunityIcons name='camera-gopro' color={colors.white} size={30} />
+                tabBarIcon: ({ color, size }) =>
+                    <MaterialCommunityIcons name='camera-gopro' color={color} size={size} />
             }} />
         <Tab.Screen
             name='AIRS'
-            component={AirsScreen}
+            component={AirsNavigator}
             options={{
                 headerShown: false,
                 tabBarLabel: 'AIRS',
-                tabBarIcon: () =>
-                    <MaterialCommunityIcons name='bandage' color={colors.white} size={30} />
+                tabBarIcon: ({ color, size }) =>
+                    <MaterialCommunityIcons name='bandage' color={color} size={size} />
             }} />
         <Tab.Screen
             name='DOWNLOADS'
             component={DownloadsScreen} options={{
                 headerShown: false,
-                tabBarIcon: () =>
-                    <MaterialCommunityIcons name='cloud-download' color={colors.white} size={30} />
+                tabBarIcon: ({ color, size }) =>
+                    <MaterialCommunityIcons name='cloud-download' color={color} size={size} />
             }} />
         <Tab.Screen
             name='DIRECTORY'
             component={DirectoryScreen} options={{
                 headerShown: false,
-                tabBarIcon: () =>
-                    <MaterialCommunityIcons name='account-search' color={colors.white} size={30} />
+                tabBarIcon: ({ color, size }) =>
+                    <MaterialCommunityIcons name='account-search' color={color} size={size} />
             }} />
         <Tab.Screen
             name='SUPPORT'
             component={SupportScreen} options={{
                 headerShown: false,
-                tabBarIcon: () =>
-                    <MaterialCommunityIcons name='hand-okay' color={colors.white} size={30} />
+                tabBarIcon: ({ color, size }) =>
+                    <MaterialCommunityIcons name='card-account-details-star' color={color} size={size} />
             }} />
         <Tab.Screen
             name='SETTINGS'
             component={SettingsScreen} options={{
                 headerShown: false,
-                tabBarIcon: () =>
-                    <MaterialCommunityIcons name='content-save-cog' color={colors.white} size={30} />
+                tabBarIcon: ({ color, size }) =>
+                    <MaterialCommunityIcons name='content-save-cog' color={color} size={size} />
             }} />
     </Tab.Navigator>
 );

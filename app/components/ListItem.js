@@ -7,10 +7,13 @@ import AppText from './AppText'
 export default function ListItem({ image, title, description, style }) {
     return (
         <View style={[styles.listContainer, style]}>
-            <View style={styles.photoContainer}>
-                <Image source={image} style={styles.image} />
-            </View>
-
+            {image &&
+                <View style={{ justifyContent: 'center' }}>
+                <View style={styles.photoContainer}>
+                    <Image source={image} style={styles.image} />
+                </View>
+                </View>
+            }
             <View style={styles.txtContainer}>
                 <AppText
                     numberOfLines={2}
@@ -35,15 +38,14 @@ const styles = StyleSheet.create({
     image: {
         width: '100%',
         height: '100%',
-        resizeMode: 'cover',
+        resizeMode: 'contain',
         zIndex: 100,
     },
     photoContainer: {
         width: 70,
         height: 70,
         borderRadius: 35,
-        backgroundColor: 'yellow',
-        top: 10,
+        backgroundColor: colors.black,
         overflow: 'hidden',
     },
     txtContainer: {
@@ -56,5 +58,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         padding: 10,
         backgroundColor: colors.white,
+        marginBottom: 10,
     }
 })
