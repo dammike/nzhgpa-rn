@@ -1,5 +1,6 @@
 import React from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import { color } from 'react-native-elements/dist/helpers'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 
 import ImageBackground from 'react-native/Libraries/Image/ImageBackground'
@@ -14,7 +15,7 @@ export default function Card({ description, image, onPress, title }) {
                     source={image}
                     style={styles.image}>
 
-                    <View style={styles.txtContainer}>
+                    <View style={[styles.txtContainer, styles.transparentBG]}>
                         <AppText style={styles.title}>{title}</AppText>
                         <AppText style={styles.description}>{description}</AppText>
                     </View>
@@ -35,16 +36,18 @@ const styles = StyleSheet.create({
         elevation: 10,
     },
     description: {
-        fontSize: 14,
+        fontSize: 13,
+        color: colors.white,
         textShadowColor: colors.white,
         textShadowRadius: 50,
         textDecorationColor: colors.white,
     },
     title: {
-        fontSize: 18,
+        fontSize: 16,
         fontWeight: 'bold',
         color: colors.white,
         textTransform: 'capitalize',
+        paddingBottom: 8,
     },
     image: {
         width: '100%',
@@ -53,7 +56,16 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
     },
     txtContainer: {
-        marginHorizontal: 8,
-        marginBottom: 18,
+        paddingHorizontal: 10,
+        paddingVertical: 10,
+        backgroundColor: colors.grey,
+        height: '40%',
+        borderTopRightRadius: 20,
+        borderTopLeftRadius: 20,
+        // opacity: .3,
     },
+    transparentBG: {
+        backgroundColor: '#00000050',
+        color: '#FFFFFF'
+    }
 })

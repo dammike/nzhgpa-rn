@@ -7,6 +7,7 @@ import AppText from '../components/AppText'
 import Card from '../components/Card'
 import ListItem from '../components/ListItem'
 import Screen from '../components/Screen'
+import colors from '../config/colors'
 
 const articles = [
     {
@@ -34,32 +35,42 @@ const articles = [
     },
 ];
 
+
+const Header = () => (
+    <>
+        <ListItem
+            image={require('../assets/logo.png')}
+            title="Welcome, Dammike!"
+            description="We are currently updating our App to enable LiveTracking" />
+
+        <Divider width={1} />
+    </>
+);
+
+const SortPanel = () => (
+    <View style={styles.sortPanel}>
+        <TouchableWithoutFeedback onPress={() => console.log('filter results!')}>
+            <View style={styles.headerBtnBox}>
+                <AppText style={styles.headerBtnTitle}>Most Viewed</AppText>
+                <MaterialCommunityIcons name='chevron-down' />
+            </View>
+        </TouchableWithoutFeedback>
+
+        <View style={styles.headerPanel}>
+            <AppText style={styles.headerPanelTxt}>Saved</AppText>
+            <MaterialCommunityIcons name='heart' />
+        </View>
+    </View>
+);
+
 export default function FeedScreen({ navigation }) {
     return (
         <Screen>
-            <ListItem
-                image={require('../assets/logo.png')}
-                title="Welcome, Dammike!"
-                description="We are currently updating our App to enable LiveTracking" />
-            <Divider width={1} />
-
-            <View style={styles.cardHeader}>
-                <TouchableWithoutFeedback onPress={() => console.log('filter results!')}>
-                    <View style={styles.headerBtnBox}>
-                        <AppText style={styles.headerBtnTitle}>Most Viewed</AppText>
-                        <MaterialCommunityIcons name='chevron-down' />
-                    </View>
-                </TouchableWithoutFeedback>
-
-                <View style={styles.headerPanel}>
-                    <AppText style={styles.headerPanelTxt}>Saved</AppText>
-                    <MaterialCommunityIcons name='heart' />
-                </View>
-            </View>
-
+            <Header />
             <FlatList
                 data={articles}
                 keyExtractor={item => item.id.toString()}
+                ListHeaderComponent={SortPanel}
                 renderItem={({ item }) => (
                     <Card
                         image={item.image}
@@ -68,24 +79,27 @@ export default function FeedScreen({ navigation }) {
                         onPress={() => navigation.navigate('FeedDetails', item)}
                     />
                 )}
+                showsVerticalScrollIndicator={false}
+                stickyHeaderIndices={[0]}
             />
         </Screen>
     )
 }
 
 const styles = StyleSheet.create({
-    cardHeader: {
+    sortPanel: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingHorizontal: 10,
+        backgroundColor: colors.white,
     },
     headerBtnBox: {
         flexDirection: 'row',
         alignItems: 'center',
     },
     headerBtnTitle: {
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: 'bold',
         paddingVertical: 10,
         marginRight: 8,

@@ -28,7 +28,7 @@ export default function ListItem({ image, title, description, style }) {
 
 const styles = StyleSheet.create({
     description: {
-        fontSize: 16,
+        fontSize: 14,
     },
     title: {
         fontSize: 20,
@@ -50,6 +50,8 @@ const styles = StyleSheet.create({
         elevation: 5,
         borderColor: colors.primary,
         borderWidth: 5,
+        marginLeft: -13,
+        marginRight: 10,
     },
     txtContainer: {
         paddingHorizontal: 10,
@@ -59,7 +61,7 @@ const styles = StyleSheet.create({
     },
     listContainer: {
         flexDirection: 'row',
-        padding: 10,
+        padding: 25,
         backgroundColor: colors.white,
     }
 })
