@@ -11,12 +11,16 @@ export default function FlyingSitesScreen({ navigation }) {
                 <ListItem title="Site Search" description="Find sites closer to you along with it's current WX info." />
             </TouchableWithoutFeedback>
 
+            <TouchableWithoutFeedback onPress={() => navigation.navigate('LiveTracking')} >
+                <ListItem title="Live Tracking" description="Join Pilots looking for friends to fly in real time, track their progress on a Map." />
+            </TouchableWithoutFeedback>
+
             <TouchableWithoutFeedback onPress={() => navigation.navigate('ChallengeSeries')} >
                 <ListItem title="Challenge Series" description="Beat your personal best or undertake an existing serie of fun challenges" />
             </TouchableWithoutFeedback>
 
-            <TouchableWithoutFeedback onPress={() => navigation.navigate('LiveTracking')} >
-                <ListItem title="Live Tracking" description="Join Pilots looking for friends to fly in real time, track their progress on a Map." />
+            <TouchableWithoutFeedback onPress={() => navigation.navigate('HallOfFame')} >
+                <ListItem title="Hall of Fame" description="New Zealand XC League &amp; all site records." />
             </TouchableWithoutFeedback>
         </Screen>
     )
