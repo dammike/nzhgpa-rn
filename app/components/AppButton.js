@@ -1,9 +1,10 @@
-import React from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import React from 'react';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import colors from '../config/colors';
 import AppText from './AppText';
+
 
 export default function AppButton({ onPress, backgroundColor = 'dodgerblue', iconName, title }) {
     return (
@@ -11,7 +12,8 @@ export default function AppButton({ onPress, backgroundColor = 'dodgerblue', ico
             onPress={onPress}
             style={[styles.btn, { backgroundColor: backgroundColor }]}>
             {iconName &&
-                <MaterialCommunityIcons name={iconName} size={28} style={styles.icon} />}
+                <MaterialCommunityIcons name={iconName} size={28} style={styles.icon} />
+            }
             <AppText style={styles.btnTxt}>{title}</AppText>
         </TouchableOpacity>
     )

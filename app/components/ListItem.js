@@ -19,7 +19,7 @@ export default function ListItem({ image, title, description, style }) {
                     numberOfLines={2}
                     style={styles.title}>{title}</AppText>
                 <AppText
-                    numberOfLines={2}
+                    numberOfLines={3}
                     style={styles.description}>{description}</AppText>
             </View>
         </View>
@@ -28,10 +28,10 @@ export default function ListItem({ image, title, description, style }) {
 
 const styles = StyleSheet.create({
     description: {
-        fontSize: 14,
+        fontSize: 16,
     },
     title: {
-        fontSize: 22,
+        fontSize: 20,
         textTransform: 'capitalize',
         fontWeight: 'bold',
     },
@@ -47,9 +47,12 @@ const styles = StyleSheet.create({
         borderRadius: 35,
         backgroundColor: colors.black,
         overflow: 'hidden',
+        elevation: 5,
+        borderColor: colors.primary,
+        borderWidth: 5,
     },
     txtContainer: {
-        padding: 10,
+        paddingHorizontal: 10,
         flex: 1,
         justifyContent: 'center'
 
@@ -58,6 +61,5 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         padding: 10,
         backgroundColor: colors.white,
-        marginBottom: 10,
     }
 })
