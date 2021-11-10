@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { ScrollView, StyleSheet, View } from 'react-native'
 import { Divider } from 'react-native-elements';
-import { FlatList, ScrollView } from 'react-native-gesture-handler';
+
 import AppText from '../components/AppText';
 import AppTextInput from '../components/AppTextInput'
 import ListItem from '../components/ListItem';
@@ -42,7 +42,7 @@ const pilots = [
         pin: 1001,
         club: null,
         membershipLevel: 'STUDENT'
-    },
+    }
 ];
 
 export default function DirectoryScreen() {
@@ -65,19 +65,17 @@ export default function DirectoryScreen() {
                     <AppText style={styles.searchTitle}>1 Results Found</AppText>
                     <Divider width={1} />
 
-                    <ScrollView>
-                        {pilots.filter(item => (item.name.toLowerCase().includes(searchText)))
+                    {pilots.filter(item => (item.name.toLowerCase().includes(searchText.toLowerCase())))
                             .map(pilot => (
                                 <>
                                     <ListItem
-                                        key={pilot.id.toString()}
+                                        key={pilot.id}
                                         title={pilot.name}
                                         description={pilot.pin}
                                     />
                                     <Divider />
                                 </>
                             ))}
-                    </ScrollView>
                 </View>
             </View>
         </Screen>
