@@ -51,17 +51,18 @@ const styles = StyleSheet.create({
         borderColor: colors.primary,
         borderWidth: 5,
         marginLeft: -13,
-        marginRight: 10,
+        marginRight: 20,
     },
     txtContainer: {
-        paddingHorizontal: 10,
+        paddingHorizontal: 0,
         flex: 1,
         justifyContent: 'center'
 
     },
     listContainer: {
         flexDirection: 'row',
-        padding: 25,
+        paddingHorizontal: 25,
+        paddingBottom: 8,
         backgroundColor: colors.white,
     }
 })

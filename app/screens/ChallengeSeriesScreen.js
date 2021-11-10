@@ -1,11 +1,12 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
+import AppText from '../components/AppText'
 import Screen from '../components/Screen'
 
-export default function ContributeScreen() {
+export default function ChallengeSeriesScreen() {
     return (
         <Screen>
-            <Text>Record your last flight here</Text>
+            <AppText>Challenge series</AppText>
         </Screen>
     )
 }

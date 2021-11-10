@@ -7,7 +7,7 @@ import ImageBackground from 'react-native/Libraries/Image/ImageBackground'
 import colors from '../config/colors'
 import AppText from './AppText'
 
-export default function Card({ description, image, onPress, style, title }) {
+export default function CardTile({ description, image, onPress, style, title }) {
     return (
         <TouchableWithoutFeedback onPress={onPress}>
             <View style={[styles.container, style]}>

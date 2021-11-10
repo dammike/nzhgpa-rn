@@ -41,7 +41,7 @@ const Header = () => (
         <ListItem
             image={require('../assets/logo.png')}
             title="Welcome, Dammike!"
-            description="We are currently updating our App to enable LiveTracking" />
+            description="We are currently updating our App to enable LiveTracking. This feature will be updated as soon as possible!.." />
 
         <Divider width={1} />
     </>

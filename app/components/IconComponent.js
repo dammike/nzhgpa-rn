@@ -11,7 +11,7 @@ export default function IconComponent({ name, color = colors.white, size = 20 })
 
 const styles = StyleSheet.create({
     icon: {
-        marginRight: 20,
+        marginRight: 15,
         marginLeft: 18,
     },
 })

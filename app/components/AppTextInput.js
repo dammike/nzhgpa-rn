@@ -24,6 +24,7 @@ const styles = StyleSheet.create({
     inputContainer: {
         backgroundColor: colors.grey,
         padding: 12,
+        paddingLeft: 20,
         borderRadius: 40,
         elevation: 6,
         borderBottomColor: '#eee4',
