@@ -43,11 +43,31 @@ const pilots = [
         club: null,
         membershipLevel: 'STUDENT'
     }
+    ,
+    {
+        id: 6,
+        name: "Amy Rose",
+        pin: 1001,
+        club: null,
+        membershipLevel: 'STUDENT'
+    },
+    {
+        id: 7,
+        name: "Jack Lambert",
+        pin: 1001,
+        club: null,
+        membershipLevel: 'STUDENT'
+    }
 ];
 
 export default function DirectoryScreen() {
 
-    const [searchText, setSearchText] = useState('');
+    const [filteredResults, setFilteredResults] = useState(pilots);
+
+
+    const search = (searchText) => {
+        setFilteredResults(pilots.filter(item => (item.name.toLowerCase().includes(searchText.toLowerCase()))));
+    }
 
     return (
         <Screen>
@@ -59,23 +79,24 @@ export default function DirectoryScreen() {
 
             <View style={styles.container}>
                 <View style={styles.searchPanel}>
-                    <AppTextInput onChangeText={setSearchText} placeholder="Search ..." />
+                    <AppTextInput onChangeText={search} placeholder="Search ..." />
                 </View>
                 <View style={styles.results}>
-                    <AppText style={styles.searchTitle}>1 Results Found</AppText>
+                    <AppText style={styles.searchTitle}>{filteredResults.length} Results</AppText>
                     <Divider width={1} />
 
-                    {pilots.filter(item => (item.name.toLowerCase().includes(searchText.toLowerCase())))
-                            .map(pilot => (
+                    <ScrollView style={{ flexGrow: 1 }}>
+                        {filteredResults.map(pilot => (
                                 <>
                                     <ListItem
                                         key={pilot.id}
                                         title={pilot.name}
-                                        description={pilot.pin}
+                                    description={'PIN: ' + pilot.pin + ' - ' + pilot.club + '\nMembership: ' + pilot.membershipLevel}
                                     />
                                     <Divider />
                                 </>
                             ))}
+                    </ScrollView>
                 </View>
             </View>
         </Screen>

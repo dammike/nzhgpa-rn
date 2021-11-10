@@ -4,7 +4,7 @@ import { Image, StyleSheet, View } from 'react-native'
 import colors from '../config/colors'
 import AppText from './AppText'
 
-export default function ListItem({ image, title, description, style }) {
+export default function ListItem({ description, image, style, title }) {
     return (
         <View style={[styles.listContainer, style]}>
             {image &&
