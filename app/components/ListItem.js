@@ -54,7 +54,6 @@ const styles = StyleSheet.create({
         marginRight: 20,
     },
     txtContainer: {
-        paddingHorizontal: 0,
         flex: 1,
         justifyContent: 'center'
 
@@ -64,5 +63,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 25,
         paddingBottom: 8,
         backgroundColor: colors.white,
+        height: 100,
+        borderRadius: 6,
     }
 })

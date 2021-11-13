@@ -36,14 +36,18 @@ export default function FeedDetailsScreen({ route }) {
                     </AppText>
                 </View>
 
+
                 <View style={styles.commentSection}>
                     <Comments add={true} comments={commentData} />
                 </View>
 
-                <Divider width={3} />
-                <ListItem
-                    title="Contact hours: 2-5pm"
-                    description="Feel free to send a message to Derek at derek@gmail.com" />
+                <Divider width={1} />
+
+                <View style={styles.footerSection}>
+                    <ListItem
+                        title="Contact hours: 2-5pm"
+                        description="Feel free to send a message to Derek at derek@gmail.com" />
+                </View>
             </ScrollView>
         </View>
     )
@@ -61,18 +65,17 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     commentSection: {
-        flex: 1,
-        paddingBottom: 40,
-        backgroundColor: colors.white,
+        paddingBottom: 20,
+    },
+    footerSection: {
+        paddingTop: 30,
     },
     headerListItem: {
-        borderTopLeftRadius: 40,
-        borderTopRightRadius: 40,
-        elevation: 2,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        elevation: 1,
         paddingTop: 15,
         backgroundColor: colors.white,
-        paddingBottom: 18,
-        opacity: .9,
         top: -70,
     },
     image: {

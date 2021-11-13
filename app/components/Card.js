@@ -44,6 +44,7 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 16,
+        letterSpacing: .3,
         fontWeight: 'bold',
         color: colors.white,
         textTransform: 'capitalize',

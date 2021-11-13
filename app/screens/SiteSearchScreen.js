@@ -50,6 +50,7 @@ function SiteSearchScreen({ navigation }) {
                                 onPress={() => navigation.navigate('SiteSearchResultDetails', item)}
                             />
                         )}
+                        showsHorizontalScrollIndicator={false}
                     />
                 </View>
                 <View style={styles.flightOfTheDayContainer}>

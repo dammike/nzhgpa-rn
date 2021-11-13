@@ -83,7 +83,7 @@ export default function DirectoryScreen() {
             </TouchableWithoutFeedback>
 
             <View style={styles.headerPanel}>
-                <AppText style={styles.headerPanelTxt}>Show: WOF Inspectors Only</AppText>
+                <AppText style={styles.headerPanelTxt}> WOF Inspectors Only</AppText>
                 <MaterialCommunityIcons name='chevron-down' size={16} />
             </View>
         </View>

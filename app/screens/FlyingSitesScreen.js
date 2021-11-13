@@ -1,4 +1,5 @@
 import React from 'react'
+import { Image, View } from 'react-native'
 import { StyleSheet } from 'react-native'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import ListItem from '../components/ListItem'
@@ -7,7 +8,10 @@ import Screen from '../components/Screen'
 export default function FlyingSitesScreen({ navigation }) {
     return (
         <Screen>
-            <TouchableWithoutFeedback onPress={() => navigation.navigate('SiteSearch')} >
+            <View>
+                <Image source={require('../assets/logo.png')} style={{ width: '40%', height: 50, resizeMode: 'contain' }} />
+            </View>
+            <TouchableWithoutFeedback onPress={() => navigation.navigate('SiteSearchNavigator')} >
                 <ListItem title="Site Search" description="Find sites closer to you along with it's current WX info." />
             </TouchableWithoutFeedback>
 
