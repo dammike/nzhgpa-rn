@@ -1,25 +1,15 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import AuthNavigator from './app/navigation/AuthNavigator';
+
 import AppNavigator from './app/navigation/AppNavigator';
-import AirsFormScreen from './app/screens/AirsFormScreen';
-
-
+import * as ImagePicker from 'expo-image-picker';
+import ContributeScreen from './app/screens/ContributeScreen';
 
 export default function App() {
 
   return (
-    // <NavigationContainer>
-    //   <AuthNavigator />
-    // </NavigationContainer>
-
-    // <FeedScreen />
-    // <FeedDetailsScreen />
-
     <NavigationContainer>
       <AppNavigator />
     </NavigationContainer>
-
-    // <AirsFormScreen />
   );
 }
