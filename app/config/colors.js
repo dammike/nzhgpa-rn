@@ -9,4 +9,5 @@ export default {
     danger: 'red',
     safe: 'green',
     neutral: 'blue',
+    divider: '#ebebeb',
 }

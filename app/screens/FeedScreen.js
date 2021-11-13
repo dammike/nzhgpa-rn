@@ -1,8 +1,9 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons'
-import React from 'react'
+import React, { useState } from 'react'
 import { Image, ImageBackground, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { Divider } from 'react-native-elements'
 import { FlatList, TouchableWithoutFeedback } from 'react-native-gesture-handler'
+import AppFormPicker from '../components/AppFormPicker'
 import AppText from '../components/AppText'
 import Card from '../components/Card'
 import ListItem from '../components/ListItem'
@@ -35,6 +36,11 @@ const articles = [
     },
 ];
 
+const filterOptions = [
+    { title: 'MOST POPULAR', value: 1 },
+    { title: 'LATEST', value: 2 },
+    { title: 'COMPETITIONS', value: 3 },
+];
 
 const Header = () => (
     <>
@@ -43,27 +49,37 @@ const Header = () => (
             title="Welcome, Dammike!"
             description="We are currently updating our App to enable LiveTracking. This feature will be updated as soon as possible!.." />
 
-        <Divider width={1} />
+        <Divider width={1} color={colors.divider} />
     </>
 );
 
-const SortPanel = () => (
-    <View style={styles.sortPanel}>
-        <TouchableWithoutFeedback onPress={() => console.log('filter results!')}>
-            <View style={styles.headerBtnBox}>
-                <AppText style={styles.headerBtnTitle}>Most Viewed</AppText>
-                <MaterialCommunityIcons name='chevron-down' />
-            </View>
-        </TouchableWithoutFeedback>
-
-        <View style={styles.headerPanel}>
-            <AppText style={styles.headerPanelTxt}>Saved</AppText>
-            <MaterialCommunityIcons name='heart' />
-        </View>
-    </View>
-);
 
 export default function FeedScreen({ navigation }) {
+    const [selectedFilter, setSelectedFilter] = useState();
+
+    const filter = item => {
+        setSelectedFilter(item);
+        //Filter or Call Rest API
+        console.log(item);
+    }
+
+    const SortPanel = () => (
+        <View style={styles.sortPanel}>
+            <View style={styles.headerBtnBox}>
+                <AppText style={styles.headerBtnTitle}>
+                    Filter by:
+                </AppText>
+                <AppFormPicker items={filterOptions} selectedItem={selectedFilter} onChangeSelect={filter} placeholder="Latest Posts" />
+            </View>
+
+            <View style={styles.headerPanel}>
+                <AppText style={styles.headerPanelTxt}>Saved</AppText>
+                <MaterialCommunityIcons name='heart' />
+            </View>
+        </View>
+    );
+
+
     return (
         <Screen>
             <Header />

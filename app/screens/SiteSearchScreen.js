@@ -1,7 +1,9 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import React from 'react'
+import React, { useState } from 'react'
 import { Image, ImageBackground, TouchableWithoutFeedback, View } from 'react-native';
 import { FlatList, ScrollView, StyleSheet, Text } from 'react-native'
+import { Divider } from 'react-native-elements';
+import AppFormPicker from '../components/AppFormPicker';
 import AppText from '../components/AppText';
 import CardTile from '../components/CardTile';
 import ListItem from '../components/ListItem'
@@ -10,31 +12,61 @@ import colors from '../config/colors';
 
 const sites = [
     { id: 1, name: 'KARIOITAHI', image: require('../assets/post-banner-1.jpg'), windDirection: 'NNW', siteRecord: '76.5km', isActive: true },
-    { id: 2, name: 'MURIWAI', image: require('../assets/post-banner-2.jpg'), windDirection: 'NNW' },
-    { id: 3, name: 'WHANGAREI', image: require('../assets/card-banner.jpg'), windDirection: 'NNW', siteRecord: '99.6km' },
-    { id: 4, name: 'NORTH-HEADS', image: require('../assets/background.jpg'), windDirection: 'NNW' },
+    { id: 2, name: 'MURIWAI', image: require('../assets/post-banner-2.jpg'), windDirection: 'NW' },
+    { id: 3, name: 'WHANGAREI', image: require('../assets/card-banner.jpg'), windDirection: 'SSW', siteRecord: '99.6km' },
+    { id: 4, name: 'NORTH-HEADS', image: require('../assets/background.jpg'), windDirection: 'ESE' },
 ];
 
-const SortPanel = () => (
-    <View style={styles.sortPanel}>
-        <TouchableWithoutFeedback onPress={() => console.log('filter results!')}>
-            <View style={styles.headerBtnBox}>
-                <AppText style={styles.headerBtnTitle}>Region: AUCKLAND</AppText>
-                <MaterialCommunityIcons name='chevron-down' />
-            </View>
-        </TouchableWithoutFeedback>
 
-        <View style={styles.headerPanel}>
-            <AppText style={styles.headerPanelTxt}>Wind: SSW</AppText>
-            <MaterialCommunityIcons name='wind-turbine' size={20} />
-        </View>
-    </View>
-);
+const regions = [
+    { title: 'Auckland', value: 1 },
+    { title: 'Waikato', value: 2 },
+    { title: 'Wellington', value: 3 },
+];
+
+const windDrections = [
+    { title: 'North', abbrev: 'N', value: 1 },
+    { title: 'North North-East', abbrev: 'NNE', value: 2 },
+    { title: 'North East', abbrev: 'NE', value: 3 },
+    { title: 'East North-East', abbrev: 'ENE', value: 4 },
+    { title: 'East', abbrev: 'E', value: 5 }
+];
 
 function SiteSearchScreen({ navigation }) {
+    const [selectedRegion, setSelectedRegion] = useState();
+    const [selectedWind, setSelectedWind] = useState();
+
+    const filterByRegion = item => {
+        setSelectedRegion(item);
+        //Filter or Call Rest API
+        console.log(item);
+    }
+
+    const filterByWind = item => {
+        setSelectedWind(item);
+        //Filter or Call Rest API
+        console.log(item);
+    }
+
+    const SortPanel = () => (
+        <View style={styles.sortPanel}>
+            <View style={styles.headerBtnBox}>
+                <AppText style={styles.headerBtnTitle}>Region:</AppText>
+                <AppFormPicker items={regions} selectedItem={selectedRegion} onChangeSelect={filterByRegion} placeholder="All Regions" summary="Choose a Region" />
+            </View>
+
+            <View style={styles.headerPanel}>
+                <AppText style={styles.headerPanelTxt}>Wind: </AppText>
+                <AppFormPicker style={styles.headerPanelTxt} items={windDrections} selectedItem={selectedWind} onChangeSelect={filterByWind} placeholder="ALL" summary="Select Preffered Wind Direction..." />
+                <MaterialCommunityIcons name='wind-turbine' size={20} />
+            </View>
+        </View>
+    );
+
     return (
         <Screen>
             <View style={styles.container}>
+                <ScrollView>
                 <View style={styles.resultsContainer}>
                     <SortPanel />
                     <FlatList
@@ -52,7 +84,11 @@ function SiteSearchScreen({ navigation }) {
                         )}
                         showsHorizontalScrollIndicator={false}
                     />
-                </View>
+                        <View style={styles.results}>
+                            <AppText style={{ fontWeight: 'bold' }}>8 Results Found!</AppText>
+                        </View>
+                    </View>
+                    <Divider width={1} />
                 <View style={styles.flightOfTheDayContainer}>
                     <View>
                         <View>
@@ -70,6 +106,7 @@ function SiteSearchScreen({ navigation }) {
                     source={require('../assets/glory.jpg')}
                     style={styles.gloryImage}
                 />
+                </ScrollView>
             </View>
         </Screen>
     )
@@ -108,8 +145,8 @@ const styles = StyleSheet.create({
     },
     headerPanel: {
         flexDirection: 'row',
-        width: '30%',
-        justifyContent: 'space-between',
+        width: '50%',
+        justifyContent: 'flex-end',
         alignItems: 'center',
     },
     headerPanelTxt: {
@@ -121,6 +158,10 @@ const styles = StyleSheet.create({
     resultsContainer: {
         marginBottom: 10,
         fontWeight: '800',
+    },
+    results: {
+        // paddingVertical: ,
+        paddingHorizontal: 5,
     }
 })
 

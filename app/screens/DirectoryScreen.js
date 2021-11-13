@@ -2,6 +2,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import React, { useState } from 'react'
 import { ScrollView, StyleSheet, TouchableWithoutFeedback, View } from 'react-native'
 import { Divider } from 'react-native-elements';
+import AppFormPicker from '../components/AppFormPicker';
 
 import AppText from '../components/AppText';
 import AppTextInput from '../components/AppTextInput'
@@ -62,14 +63,26 @@ const pilots = [
     }
 ];
 
+const searchOptions = [
+    { title: 'Pilots', value: 1 },
+    { title: 'WOF Inspectors', value: 2 },
+    { title: 'PG Schools', value: 3 },
+    { title: 'HG Schools', value: 4 }
+];
+
 
 export default function DirectoryScreen() {
-
     const [filteredResults, setFilteredResults] = useState(pilots);
-
+    const [selectedSearchOption, setSelectedSearchOption] = useState();
 
     const search = (searchText) => {
         setFilteredResults(pilots.filter(item => (item.name.toLowerCase().includes(searchText.toLowerCase()))));
+    }
+
+    const handleFilteredSearch = item => {
+        setSelectedSearchOption(item);
+        //Filter or Call Rest API
+        console.log(item);
     }
 
     const SortPanel = () => (
@@ -83,8 +96,11 @@ export default function DirectoryScreen() {
             </TouchableWithoutFeedback>
 
             <View style={styles.headerPanel}>
-                <AppText style={styles.headerPanelTxt}> WOF Inspectors Only</AppText>
-                <MaterialCommunityIcons name='chevron-down' size={16} />
+                <AppText style={styles.headerBtnTitle}>
+                    {/* WOF Inspectors Only */}
+                    Filter By:
+                </AppText>
+                <AppFormPicker items={searchOptions} selectedItem={selectedSearchOption} onChangeSelect={handleFilteredSearch} placeholder="ALL" />
             </View>
         </View>
     );
@@ -159,9 +175,10 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         alignItems: 'center',
     },
-    headerPanelTxt: {
-        fontSize: 15,
+    headerBtnTitle: {
+        fontSize: 14,
         fontWeight: 'bold',
-        textDecorationLine: 'underline',
+        paddingVertical: 10,
+        marginRight: 8,
     }
 })
