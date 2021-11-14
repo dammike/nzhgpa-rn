@@ -1,19 +1,38 @@
-import React from 'react'
+import { MaterialCommunityIcons } from '@expo/vector-icons'
+import React, { useState } from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { color } from 'react-native-elements/dist/helpers'
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
+import { TouchableWithoutFeedback } from 'react-native'
 
 import ImageBackground from 'react-native/Libraries/Image/ImageBackground'
 import colors from '../config/colors'
 import AppText from './AppText'
 
 export default function Card({ description, image, onPress, style, title }) {
+    const [liked, setLiked] = useState(false);
+
+    const handleLikeImage = image => {
+        console.log('liked the image');
+    }
     return (
         <TouchableWithoutFeedback onPress={onPress}>
             <View style={[styles.container, style]}>
                 <ImageBackground
                     source={image}
                     style={styles.image}>
+
+                    <View style={styles.authorContainer}>
+                        <MaterialCommunityIcons name="record" size={20} color={colors.danger} />
+                        <AppText style={{ color: colors.white }}>57 views</AppText>
+                    </View>
+
+                    <TouchableWithoutFeedback onPress={handleLikeImage}>
+                        <View style={styles.heartContainer}>
+                            <MaterialCommunityIcons name="eye-outline" size={20} color={colors.background} />
+                            <AppText style={{ color: colors.white }}>57 views</AppText>
+                            <MaterialCommunityIcons name="heart-outline" size={20} color={colors.background} />
+                        </View>
+                    </TouchableWithoutFeedback>
 
                     <View style={[styles.txtContainer, styles.transparentBG]}>
                         <AppText style={styles.title}>{title}</AppText>
@@ -26,9 +45,16 @@ export default function Card({ description, image, onPress, style, title }) {
 }
 
 const styles = StyleSheet.create({
+    authorContainer: {
+        position: 'absolute',
+        top: 10,
+        flex: 1,
+        left: 5,
+        flexDirection: 'row'
+    },
     container: {
         width: '100%',
-        height: 200,
+        height: 250,
         backgroundColor: colors.grey,
         borderRadius: 12,
         overflow: 'hidden',
@@ -49,6 +75,13 @@ const styles = StyleSheet.create({
         color: colors.white,
         textTransform: 'capitalize',
         paddingBottom: 8,
+    },
+    heartContainer: {
+        position: 'absolute',
+        top: 10,
+        flex: 1,
+        right: 5,
+        flexDirection: 'row'
     },
     image: {
         width: '100%',

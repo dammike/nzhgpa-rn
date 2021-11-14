@@ -90,7 +90,7 @@ export default function DirectoryScreen() {
             <TouchableWithoutFeedback onPress={() => console.log('filter results!')}>
                 <View style={styles.headerBtnBox}>
                     <AppText style={styles.searchTitle}>
-                        {filteredResults.length} Results
+                        {(filteredResults.length) > 0 ? filteredResults.length : 'No'} Results
                     </AppText>
                 </View>
             </TouchableWithoutFeedback>
