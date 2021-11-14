@@ -5,13 +5,56 @@ import { FlatList, ScrollView, StyleSheet, Text } from 'react-native'
 import { Divider } from 'react-native-elements';
 import AppFormPicker from '../components/AppFormPicker';
 import AppText from '../components/AppText';
+import AppTextInput from '../components/AppTextInput';
 import CardTile from '../components/CardTile';
 import ListItem from '../components/ListItem'
 import Screen from '../components/Screen'
 import colors from '../config/colors';
 
 const sites = [
-    { id: 1, name: 'KARIOITAHI', image: require('../assets/post-banner-1.jpg'), windDirection: 'NNW', siteRecord: '76.5km', isActive: true },
+    {
+        id: 1,
+        name: "Bethell's Beach",
+        coords: {
+            latitude: -36.89083298340516,
+            longitude: 174.45002621587918,
+        },
+        description: "Bethell's Beach is located on Auckland's West Coast between Piha and Muriwai Beaches. It's accessible by taking Bethell's road from Swanson on the Northern end of the Waitakere Ranges",
+        image: require('../assets/post-banner-1.jpg'),
+        siteInformation: {
+            siteType: 'Coastal',
+            landing: 'On the beach',
+        },
+        weatherAndWindDirection: {
+            windDirection: 'SW',
+            notes: 'The club operates a weather station at Muriwai',
+        },
+        mandatoryNotices: "The land owner must be contacted prior to flying.  See access conditions.",
+        siteRadio: {
+            channel: 20,
+            frequency: 476.900,
+        },
+        restrictions: {
+            HG: 'none',
+            PG: 'PG2 + 60 hours'
+        },
+        cautions: {
+            HG: 'None',
+            PG: "Be particularly aware of the possibility of turbulence from the headland located to the South.  Take particular caution in the event of wind change as as any change and strengthening to the South results in no safe landing options remaining.  For the same wind direction and conditions there are much more friendly sites available.",
+        },
+        airspace: 'This site is located in VFR Transit Lane T156 with a flight ceiling of 1500 feet A.S.L.',
+        accessConditions: "The farmer who owns the property has concerns over our activities disturbing stock and has asked that we check with him before entering or flying.  Check with the site monitor prior to flying.",
+        siteRecord: '76.5km', isActive: true,
+        siteMonitor: {
+            name: 'Alan Hills',
+            contact: {
+                phone: '09 570 5759',
+                mobile: '027 398 2345 '
+            }
+        },
+        notes: 'None',
+        siteAchievements: 'none',
+    },
     { id: 2, name: 'MURIWAI', image: require('../assets/post-banner-2.jpg'), windDirection: 'NW' },
     { id: 3, name: 'WHANGAREI', image: require('../assets/card-banner.jpg'), windDirection: 'SSW', siteRecord: '99.6km' },
     { id: 4, name: 'NORTH-HEADS', image: require('../assets/background.jpg'), windDirection: 'ESE' },
@@ -51,14 +94,27 @@ function SiteSearchScreen({ navigation }) {
     const SortPanel = () => (
         <View style={styles.sortPanel}>
             <View style={styles.headerBtnBox}>
-                <AppText style={styles.headerBtnTitle}>Region:</AppText>
-                <AppFormPicker items={regions} selectedItem={selectedRegion} onChangeSelect={filterByRegion} placeholder="All Regions" summary="Choose a Region" />
+                {/* <AppText style={styles.headerBtnTitle}>Region:</AppText> */}
+                <AppFormPicker
+                    items={regions}
+                    selectedItem={selectedRegion}
+                    onChangeSelect={filterByRegion}
+                    placeholder="Choose Region"
+                    summary="Choose a Region"
+                    IconComponent={<MaterialCommunityIcons name="map-marker" size={20} />} />
             </View>
 
             <View style={styles.headerPanel}>
-                <AppText style={styles.headerPanelTxt}>Wind: </AppText>
-                <AppFormPicker style={styles.headerPanelTxt} items={windDrections} selectedItem={selectedWind} onChangeSelect={filterByWind} placeholder="ALL" summary="Select Preffered Wind Direction..." />
-                <MaterialCommunityIcons name='wind-turbine' size={20} />
+                <AppText style={styles.headerPanelTxt}>
+                </AppText>
+                <AppFormPicker
+                    style={styles.headerPanelTxt}
+                    items={windDrections}
+                    selectedItem={selectedWind}
+                    onChangeSelect={filterByWind}
+                    placeholder="Wind Direction"
+                    summary="Select Preffered Wind Direction..."
+                    IconComponent={<MaterialCommunityIcons name="compass" size={20} />} />
             </View>
         </View>
     );
@@ -66,9 +122,9 @@ function SiteSearchScreen({ navigation }) {
     return (
         <Screen>
             <View style={styles.container}>
-                <ScrollView>
-                <View style={styles.resultsContainer}>
-                    <SortPanel />
+                <ScrollView showsVerticalScrollIndicator={false}>
+                    <AppTextInput placeholder="Search..." />
+                    <View style={styles.resultsContainer}>
                     <FlatList
                         horizontal
                         data={sites}
@@ -84,8 +140,9 @@ function SiteSearchScreen({ navigation }) {
                         )}
                         showsHorizontalScrollIndicator={false}
                     />
+                        <SortPanel />
                         <View style={styles.results}>
-                            <AppText style={{ fontWeight: 'bold' }}>8 Results Found!</AppText>
+                            <AppText style={{ fontWeight: 'bold' }}>8 Total Results!</AppText>
                         </View>
                     </View>
                     <Divider width={1} />
@@ -150,7 +207,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     headerPanelTxt: {
-        fontSize: 16,
+        fontSize: 14,
     },
     container: {
         flex: 1,

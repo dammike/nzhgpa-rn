@@ -50,6 +50,7 @@ const AppNavigator = () => (
             options={{
                 headerShown: false,
                 tabBarLabel: 'AIRS',
+                tabBarBadge: 2,
                 tabBarIcon: ({ color, size }) =>
                     <MaterialCommunityIcons name='bandage' color={color} size={size} />
             }} />

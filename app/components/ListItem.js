@@ -4,7 +4,7 @@ import { Image, StyleSheet, View } from 'react-native'
 import colors from '../config/colors'
 import AppText from './AppText'
 
-export default function ListItem({ description, image, style, title }) {
+export default function ListItem({ IconComponent, description, image, style, title }) {
     return (
         <View style={[styles.listContainer, style]}>
             {image &&
@@ -14,13 +14,22 @@ export default function ListItem({ description, image, style, title }) {
                 </View>
                 </View>
             }
+            {(!image && IconComponent) &&
+                < View style={{ justifyContent: 'center' }}>
+                    <View style={styles.photoContainer}>
+                        {IconComponent}
+                    </View>
+                </View>
+            }
             <View style={styles.txtContainer}>
                 <AppText
                     numberOfLines={2}
                     style={styles.title}>{title}</AppText>
-                <AppText
-                    numberOfLines={3}
+                {description &&
+                    <AppText
+                    numberOfLines={4}
                     style={styles.description}>{description}</AppText>
+                }
             </View>
         </View>
     )
@@ -46,10 +55,12 @@ const styles = StyleSheet.create({
         height: 70,
         borderRadius: 35,
         backgroundColor: colors.black,
+        justifyContent: 'center',
+        alignItems: 'center',
         overflow: 'hidden',
         elevation: 5,
-        borderColor: colors.primary,
-        borderWidth: 5,
+        borderColor: colors.divider,
+        borderWidth: 1,
         marginLeft: -13,
         marginRight: 20,
     },
@@ -64,6 +75,5 @@ const styles = StyleSheet.create({
         paddingBottom: 8,
         backgroundColor: colors.white,
         height: 100,
-        borderRadius: 6,
     }
 })

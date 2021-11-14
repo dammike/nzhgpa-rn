@@ -19,10 +19,10 @@ export default function AppTextInput({ placeholder, IconComponent, ...otherProps
 
 const styles = StyleSheet.create({
     input: {
-        fontSize: 18,
+        fontSize: 14,
     },
     inputContainer: {
-        backgroundColor: colors.grey,
+        backgroundColor: colors.white,
         padding: 12,
         paddingLeft: 20,
         borderRadius: 40,
@@ -31,5 +31,6 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         flexDirection: 'row',
         alignItems: 'center',
+        marginBottom: 10,
     }
 })

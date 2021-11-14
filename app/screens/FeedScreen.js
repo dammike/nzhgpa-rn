@@ -82,7 +82,7 @@ export default function FeedScreen({ navigation }) {
 
     return (
         <Screen>
-            <Header />
+            {/* <Header /> */}
             <FlatList
                 data={articles}
                 keyExtractor={item => item.id.toString()}
@@ -98,6 +98,7 @@ export default function FeedScreen({ navigation }) {
                 showsVerticalScrollIndicator={false}
                 stickyHeaderIndices={[0]}
             />
+            <Header />
         </Screen>
     )
 }
