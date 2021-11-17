@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Dimensions, ImageBackground, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Divider } from 'react-native-elements';
 import { FlatList } from 'react-native-gesture-handler';
@@ -19,12 +19,27 @@ const commentData = [
 ];
 
 export default function SiteSearchResultDetailsScreen({ route }) {
+    const [siteDirectionString, setSiteDirectionString] = useState('Site Direction unavailable for this site..');
 
     var site = route.params;
+
+    useEffect(() => {
+        parseDirectionString();
+    }, []);
+
+    const parseDirectionString = () => {
+        if (site.weatherAndWindDirection.windDirections.length == 0) return;
+        let string = "";
+        site.weatherAndWindDirection.windDirections.map(direction => {
+            string += direction.label + ' - ' + direction.alias + '\n';
+        });
+        setSiteDirectionString(string);
+    }
 
     const SiteInformation = () => (
         <View style={styles.section}>
             <Section
+                bgColor={colors.primary}
                 title="Site Information"
                 description={site.description}
                 IconComponent={<IconComponent name="information-variant" size={40} color={colors.white} />}
@@ -37,16 +52,18 @@ export default function SiteSearchResultDetailsScreen({ route }) {
     const Weather = () => (
         <View style={styles.section}>
             <Section
+                bgColor='green'
                 title="Weather"
                 description={site.weatherAndWindDirection.notes}
                 IconComponent={<IconComponent name="weather-partly-cloudy" size={40} color={colors.white} />} />
-            <ListItem title="Site Wind Direction" description={site.weatherAndWindDirection.windDirection} />
+            <ListItem title="Site Wind Direction" description={siteDirectionString} />
         </View>
     );
 
     const MandatoryNotices = () => (
         <View style={styles.section}>
             <Section
+                bgColor='orange'
                 title="Mandatory Notices"
                 description={site.mandatoryNotices}
                 IconComponent={<IconComponent name="sign-caution" size={40} color={colors.white} />} />
@@ -56,6 +73,7 @@ export default function SiteSearchResultDetailsScreen({ route }) {
     const SiteRadioChannel = () => (
         <View style={styles.section}>
             <Section
+                bgColor='brown'
                 title="Site Radio Channel"
                 description={`Channel ${site.siteRadio.channel} - ${site.siteRadio.frequency}`}
                 IconComponent={<IconComponent name="radio-handheld" size={40} color={colors.white} />} />
@@ -65,6 +83,7 @@ export default function SiteSearchResultDetailsScreen({ route }) {
     const Restrictions = () => (
         <View style={styles.section}>
             <Section
+                bgColor='red'
                 title="Restrictions"
                 IconComponent={<IconComponent name="key" size={40} color={colors.white} />}
             />
@@ -76,6 +95,7 @@ export default function SiteSearchResultDetailsScreen({ route }) {
     const Cautions = () => (
         <View style={styles.section}>
             <Section
+                bgColor='tomato'
                 title="Cautions"
                 IconComponent={<IconComponent name="alert-decagram-outline" size={40} color={colors.white} />}
             />
@@ -87,6 +107,7 @@ export default function SiteSearchResultDetailsScreen({ route }) {
     const Airspace = () => (
         <View style={styles.section}>
             <Section
+                bgColor='tomato'
                 title="Airspace"
                 description={site.airspace}
                 IconComponent={<IconComponent name="airport" size={40} color={colors.white} />} />
@@ -96,6 +117,7 @@ export default function SiteSearchResultDetailsScreen({ route }) {
     const AccessConditions = () => (
         <View style={styles.section}>
             <Section
+                bgColor='orange'
                 title="Access Conditions"
                 description={site.accessConditions}
                 IconComponent={<IconComponent name="file-eye" size={40} color={colors.white} />} />
@@ -105,6 +127,7 @@ export default function SiteSearchResultDetailsScreen({ route }) {
     const SiteMonitor = () => (
         <View style={styles.section}>
             <Section
+                bgColor={colors.primary}
                 title="Site Monitor"
                 description={`${site.siteMonitor.name} \nPhone: ${site.siteMonitor.contact.phone} \nMobile: ${site.siteMonitor.contact.mobile}`}
                 IconComponent={<IconComponent name="cellphone-iphone" size={40} color={colors.white} />} />
@@ -114,6 +137,7 @@ export default function SiteSearchResultDetailsScreen({ route }) {
     const AdditionalNotes = () => (
         <View style={styles.section}>
             <Section
+                bgColor='brown'
                 title="Additional Notes"
                 description={site.notes}
                 IconComponent={<IconComponent name="pen" size={40} color={colors.white} />} />
@@ -123,8 +147,9 @@ export default function SiteSearchResultDetailsScreen({ route }) {
     const SiteAchievements = () => (
         <View style={styles.section}>
             <Section
+                bgColor='green'
                 title="Site Achievements"
-                description={site.notes}
+                description={site.achievements}
                 IconComponent={<IconComponent name="trophy" size={40} color={colors.white} />} />
         </View>
     );
@@ -135,12 +160,13 @@ export default function SiteSearchResultDetailsScreen({ route }) {
                 showsVerticalScrollIndicator={false}
                 stickyHeaderIndices={[1]}
             >
-                <ImageBackground source={site.image} style={styles.image} />
+                <ImageBackground source={{ uri: site.imageURI }} style={styles.image} />
 
                 <ListItem style={styles.headerListItem}
                     image={require('../assets/profile.jpeg')}
                     title={site.name}
-                    description="Auckland, New Zealand(SW, SSW, NW)" />
+                    description="Auckland, New Zealand(SW, SSW, NW)"
+                />
 
                 <View style={styles.sectionsContainer}>
                     <FlatList
@@ -161,28 +187,16 @@ export default function SiteSearchResultDetailsScreen({ route }) {
                         renderItem={({ item }) => (
                             <View>{item.ele}</View>
                         )}
-                        horizontal
+                        // horizontal
                         snapToAlignment="center"
                         snapToInterval={Dimensions.get('window').width}
                     />
-
-                    {/* <SiteInformation />
-                    <Weather />
-                    <MandatoryNotices />
-                    <SiteRadioChannel />
-                    <Restrictions />
-                    <Cautions />
-                    <Airspace />
-                    <AccessConditions />
-                    <SiteMonitor />
-                    <AdditionalNotes />
-                    <SiteAchievements /> */}
                 </View>
 
                 <View style={styles.mapContainer}>
                     <ListItem title="Site Location"
                         // IconComponent={<IconComponent name="map-marker" size={20} />}
-                        description="To see live tracking info for this site, please navigate to the Live Tracking page"
+                        description="Click on the red flag to navigate to this takeoff site."
                     />
                     <MapView initialRegion={{
                         latitude: -36.89083298340516,
@@ -193,15 +207,14 @@ export default function SiteSearchResultDetailsScreen({ route }) {
 
                         <Marker
                             coordinate={{ latitude: -36.89083298340516, longitude: 174.45002621587918 }}
-                        //image={{ uri: 'custom_pin' }}
                         />
                     </MapView>
                 </View>
 
                 <View style={styles.footerSection}>
                     <ListItem
-                        title="Contact hours: 2-5pm"
-                        description="Feel free to send a message to Derek at derek@gmail.com" />
+                        title="Open Hours"
+                        description="Site access is accessible for pilots from 10am to 5pm. Feel free to text site monitor Derek at derek@gmail.com" />
                 </View>
             </ScrollView>
         </View>

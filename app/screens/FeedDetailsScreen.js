@@ -1,6 +1,7 @@
-import React from 'react';
-import { ImageBackground, ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { ImageBackground, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Divider } from 'react-native-elements';
+import WebView from 'react-native-webview';
 
 import AppText from '../components/AppText'
 import Comments from '../components/Comments'
@@ -14,8 +15,27 @@ const commentData = [
 ];
 
 export default function FeedDetailsScreen({ route }) {
+    const [comments, setComments] = useState(commentData);
+    const [commentTxt, setCommentText] = useState('');
 
     var feed = route.params;
+
+    const handleNewComment = () => {
+        if (commentTxt === '') return;
+        try {
+            setComments([...comments,
+            {
+                id: comments.length + 1,
+                author: 'Dammike Saman',
+                comment: commentTxt
+            }
+            ]);
+            setCommentText('');
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return (
         <View style={styles.container}>
@@ -30,15 +50,25 @@ export default function FeedDetailsScreen({ route }) {
                     title={feed.title}
                     description={feed.description} />
 
-                <View style={styles.articleContainer}>
+                {/* <View style={styles.articleContainer}>
                     <AppText style={feed.articleText}>
                         {feed.article}
                     </AppText>
-                </View>
+                </View> */}
+                {/* <WebView
+                    originWhitelist={['*']}
+                    source={{ html: '<h1>This is a static HTML source!</h1>' }}
+                /> */}
 
-
-                <View style={styles.commentSection}>
-                    <Comments add={true} comments={commentData} />
+                <View
+                    style={styles.commentSection}>
+                    <Comments
+                        add={true}
+                        comments={comments}
+                        handleNewComment={handleNewComment}
+                        inputText={commentTxt}
+                        onTextInputChange={setCommentText}
+                    />
                 </View>
 
                 <Divider width={1} />
@@ -80,7 +110,7 @@ const styles = StyleSheet.create({
     },
     image: {
         width: '100%',
-        height: 400,
+        height: 350,
         resizeMode: 'contain',
         justifyContent: 'flex-end',
     },

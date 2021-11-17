@@ -4,19 +4,19 @@ import { Image, StyleSheet, View } from 'react-native'
 import colors from '../config/colors'
 import AppText from './AppText'
 
-export default function ListItem({ IconComponent, description, image, style, title }) {
+export default function ListItem({ IconComponent, description, image, imageBgColor = colors.black, style, title }) {
     return (
         <View style={[styles.listContainer, style]}>
             {image &&
                 <View style={{ justifyContent: 'center' }}>
-                <View style={styles.photoContainer}>
+                <View style={[styles.photoContainer, { backgroundColor: imageBgColor }]}>
                     <Image source={image} style={styles.image} />
                 </View>
                 </View>
             }
             {(!image && IconComponent) &&
                 < View style={{ justifyContent: 'center' }}>
-                    <View style={styles.photoContainer}>
+                <View style={[styles.photoContainer, { backgroundColor: imageBgColor }]}>
                         {IconComponent}
                     </View>
                 </View>
@@ -54,7 +54,6 @@ const styles = StyleSheet.create({
         width: 70,
         height: 70,
         borderRadius: 35,
-        backgroundColor: colors.black,
         justifyContent: 'center',
         alignItems: 'center',
         overflow: 'hidden',

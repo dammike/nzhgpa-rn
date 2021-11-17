@@ -1,7 +1,8 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import React, { useState } from 'react'
-import { ScrollView, StyleSheet, TouchableWithoutFeedback, View } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { Dimensions, ScrollView, StyleSheet, TouchableWithoutFeedback, View } from 'react-native'
 import { Divider } from 'react-native-elements';
+import { FlatList } from 'react-native-gesture-handler';
 import AppFormPicker from '../components/AppFormPicker';
 
 import AppText from '../components/AppText';
@@ -9,59 +10,7 @@ import AppTextInput from '../components/AppTextInput'
 import ListItem from '../components/ListItem';
 import Screen from '../components/Screen'
 import colors from '../config/colors';
-
-const pilots = [
-    {
-        id: 1,
-        name: "Peter James",
-        pin: "7006",
-        club: "Auckland Hang Gliding & Paragliding Club",
-        membershipLevel: 'FULL'
-    },
-    {
-        id: 2,
-        name: "Mark Walters",
-        pin: "1206",
-        club: "Wellington Hang Gliding & Paragliding Club",
-        membershipLevel: 'FULL'
-    },
-    {
-        id: 3,
-        name: "Leila Cooper",
-        pin: null,
-        club: null,
-        membershipLevel: 'STUDENT'
-    },
-    {
-        id: 4,
-        name: "Chrigel Mauer",
-        pin: 3009,
-        club: null,
-        membershipLevel: 'FULL'
-    },
-    {
-        id: 5,
-        name: "Dammike Saman",
-        pin: 1001,
-        club: null,
-        membershipLevel: 'STUDENT'
-    }
-    ,
-    {
-        id: 6,
-        name: "Amy Rose",
-        pin: 1001,
-        club: null,
-        membershipLevel: 'STUDENT'
-    },
-    {
-        id: 7,
-        name: "Jack Lambert",
-        pin: 1001,
-        club: null,
-        membershipLevel: 'STUDENT'
-    }
-];
+import pilotsApi from '../api/pilots';
 
 const searchOptions = [
     { title: 'Pilots', value: 1 },
@@ -72,8 +21,19 @@ const searchOptions = [
 
 
 export default function DirectoryScreen() {
-    const [filteredResults, setFilteredResults] = useState(pilots);
+    const [pilots, setPilots] = useState();
+    const [filteredResults, setFilteredResults] = useState();
     const [selectedSearchOption, setSelectedSearchOption] = useState();
+
+    useEffect(() => {
+        fetchPilots();
+    }, []);
+
+    const fetchPilots = async () => {
+        const response = await pilotsApi.getPilots();
+        setPilots(response.data);
+        setFilteredResults(response.data);
+    }
 
     const search = (searchText) => {
         setFilteredResults(pilots.filter(item => (item.name.toLowerCase().includes(searchText.toLowerCase()))));
@@ -90,7 +50,7 @@ export default function DirectoryScreen() {
             <TouchableWithoutFeedback onPress={() => console.log('filter results!')}>
                 <View style={styles.headerBtnBox}>
                     <AppText style={styles.searchTitle}>
-                        {(filteredResults.length) > 0 ? filteredResults.length : 'No'} Results
+                        {(filteredResults && filteredResults.length) > 0 ? filteredResults.length : 'No'} Results
                     </AppText>
                 </View>
             </TouchableWithoutFeedback>
@@ -124,16 +84,19 @@ export default function DirectoryScreen() {
 
                     <Divider width={1} />
 
-                    <ScrollView style={{ flexGrow: 1 }}>
-                        {filteredResults.map(pilot => (
-                            <View key={pilot.id}>
+                    <FlatList style={{ height: Dimensions.get('window').height * .6 }}
+                        data={filteredResults}
+                        keyExtractor={item => item.id.toString()}
+                        renderItem={({ item }) => (
+                            <View>
                                 <ListItem
-                                    title={pilot.name}
-                                    description={'PIN: ' + pilot.pin + ' - ' + pilot.club + '\nMembership: ' + pilot.membershipLevel} />
+                                    title={item.name}
+                                    description={'PIN: ' + item.pin + ' - ' + item.club + '\nMembership: ' + item.membershipLevel} />
                                 <Divider />
                             </View>
-                            ))}
-                    </ScrollView>
+                        )}
+                    />
+
                 </View>
             </View>
         </Screen>

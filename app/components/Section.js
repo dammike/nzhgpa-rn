@@ -6,11 +6,12 @@ import colors from '../config/colors';
 import AppText from './AppText';
 import ListItem from './ListItem';
 
-export default function Section({ title, description, IconComponent }) {
+export default function Section({ title, bgColor, description, IconComponent }) {
     return (
 
         <>
             <ListItem
+                imageBgColor={bgColor}
                 IconComponent={IconComponent}
                 title={title}
             />

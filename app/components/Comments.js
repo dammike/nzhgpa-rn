@@ -1,20 +1,17 @@
 import React from 'react'
-import { FlatList, Text, StyleSheet, View, KeyboardAvoidingView, Button } from 'react-native'
-import { Divider } from 'react-native-elements/dist/divider/Divider'
-import { TextInput } from 'react-native-gesture-handler'
+import { StyleSheet, View } from 'react-native'
 import AppButton from './AppButton'
 import AppTextInput from './AppTextInput'
 import ListItem from './ListItem'
 
-export default function Comments({ add = false, comments }) {
-
-
+export default function Comments({ add = false, handleNewComment, inputText, comments, onTextInputChange }) {
     return (
         <View style={styles.container}>
             <ListItem
                 image={require('../assets/logo.png')}
                 title="Comments"
-                description="2021/02/2" />
+                description="2021/02/2"
+            />
 
             <View style={styles.commentsSection}>
                 {comments.map(item => (
@@ -26,10 +23,15 @@ export default function Comments({ add = false, comments }) {
             </View>
             <View style={styles.editor}>
             {add &&
-                <KeyboardAvoidingView style={styles.addCommentContainer}>
-                    <AppTextInput style={{ marginBottom: 20 }} placeholder="Write a comment..." />
-                    <AppButton title="Submit" />
-                </KeyboardAvoidingView>
+                    <View style={styles.addCommentContainer}>
+                        <AppTextInput
+                            onChangeText={onTextInputChange}
+                            placeholder="Write a comment..."
+                            style={{ marginBottom: 20 }}
+                            value={inputText}
+                        />
+                        <AppButton title="Submit" onPress={handleNewComment} />
+                    </View>
             }
             </View>
         </View>

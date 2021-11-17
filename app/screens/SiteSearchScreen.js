@@ -1,8 +1,9 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Image, ImageBackground, TouchableWithoutFeedback, View } from 'react-native';
-import { FlatList, ScrollView, StyleSheet, Text } from 'react-native'
+import { FlatList, ScrollView, StyleSheet } from 'react-native'
 import { Divider } from 'react-native-elements';
+
 import AppFormPicker from '../components/AppFormPicker';
 import AppText from '../components/AppText';
 import AppTextInput from '../components/AppTextInput';
@@ -10,56 +11,9 @@ import CardTile from '../components/CardTile';
 import ListItem from '../components/ListItem'
 import Screen from '../components/Screen'
 import colors from '../config/colors';
-
-const sites = [
-    {
-        id: 1,
-        name: "Bethell's Beach",
-        coords: {
-            latitude: -36.89083298340516,
-            longitude: 174.45002621587918,
-        },
-        description: "Bethell's Beach is located on Auckland's West Coast between Piha and Muriwai Beaches. It's accessible by taking Bethell's road from Swanson on the Northern end of the Waitakere Ranges",
-        image: require('../assets/post-banner-1.jpg'),
-        siteInformation: {
-            siteType: 'Coastal',
-            landing: 'On the beach',
-        },
-        weatherAndWindDirection: {
-            windDirection: 'SW',
-            notes: 'The club operates a weather station at Muriwai',
-        },
-        mandatoryNotices: "The land owner must be contacted prior to flying.  See access conditions.",
-        siteRadio: {
-            channel: 20,
-            frequency: 476.900,
-        },
-        restrictions: {
-            HG: 'none',
-            PG: 'PG2 + 60 hours'
-        },
-        cautions: {
-            HG: 'None',
-            PG: "Be particularly aware of the possibility of turbulence from the headland located to the South.  Take particular caution in the event of wind change as as any change and strengthening to the South results in no safe landing options remaining.  For the same wind direction and conditions there are much more friendly sites available.",
-        },
-        airspace: 'This site is located in VFR Transit Lane T156 with a flight ceiling of 1500 feet A.S.L.',
-        accessConditions: "The farmer who owns the property has concerns over our activities disturbing stock and has asked that we check with him before entering or flying.  Check with the site monitor prior to flying.",
-        siteRecord: '76.5km', isActive: true,
-        siteMonitor: {
-            name: 'Alan Hills',
-            contact: {
-                phone: '09 570 5759',
-                mobile: '027 398 2345 '
-            }
-        },
-        notes: 'None',
-        siteAchievements: 'none',
-    },
-    { id: 2, name: 'MURIWAI', image: require('../assets/post-banner-2.jpg'), windDirection: 'NW' },
-    { id: 3, name: 'WHANGAREI', image: require('../assets/card-banner.jpg'), windDirection: 'SSW', siteRecord: '99.6km' },
-    { id: 4, name: 'NORTH-HEADS', image: require('../assets/background.jpg'), windDirection: 'ESE' },
-];
-
+import flyingSitesApi from '../api/flyingSites';
+import IconComponent from '../components/IconComponent';
+import AppButton from '../components/AppButton';
 
 const regions = [
     { title: 'Auckland', value: 1 },
@@ -76,8 +30,22 @@ const windDrections = [
 ];
 
 function SiteSearchScreen({ navigation }) {
+    const [flyingSites, setFlyingSites] = useState();
+    const [error, setError] = useState(false);
+
     const [selectedRegion, setSelectedRegion] = useState();
     const [selectedWind, setSelectedWind] = useState();
+
+    useEffect(() => {
+        fetchFlyingSites();
+    }, []);
+
+    const fetchFlyingSites = async () => {
+        const response = await flyingSitesApi.getFlyingSites();
+        if (!response.ok) return setError(true);
+        setError(false);
+        setFlyingSites(response.data);
+    }
 
     const filterByRegion = item => {
         setSelectedRegion(item);
@@ -125,16 +93,22 @@ function SiteSearchScreen({ navigation }) {
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <AppTextInput placeholder="Search..." />
                     <View style={styles.resultsContainer}>
+                        {error &&
+                            <View style={{ alignItems: 'center', marginBottom: 18, }}>
+                                <AppText>Couldn't retrieve the listings...</AppText>
+                                <AppButton backgroundColor="tomato" iconName="reload-alert" title="Try Again" onPress={() => fetchFlyingSites()} />
+                            </View>
+                        }
                     <FlatList
                         horizontal
-                        data={sites}
+                            data={flyingSites}
                         keyExtractor={item => item.id.toString()}
                         renderItem={({ item }) => (
                             <CardTile
-                                description={item.windDirection + '· Site Record: ' + item.siteRecord + '\nStatus: ' + item.isActive}
-                                image={item.image}
+                                description={'Site Record: ' + item.siteRecord + '\nStatus: ' + item.isActive}
+                                imageURI={item.imageURI}
                                 title={item.name}
-                                style={{ width: 200, backgroundColor: 'yellow', marginRight: 10, }}
+                                style={{ width: 200, marginRight: 10, }}
                                 onPress={() => navigation.navigate('SiteSearchResultDetails', item)}
                             />
                         )}
@@ -142,27 +116,25 @@ function SiteSearchScreen({ navigation }) {
                     />
                         <SortPanel />
                         <View style={styles.results}>
-                            <AppText style={{ fontWeight: 'bold' }}>8 Total Results!</AppText>
+                            <AppText style={{ fontWeight: 'bold' }}>8 Total Results!`</AppText>
                         </View>
                     </View>
                     <Divider width={1} />
-                <View style={styles.flightOfTheDayContainer}>
-                    <View>
-                        <View>
-                            <Image source={require('../assets/logo.png')} style={{ width: '40%', height: 50, resizeMode: 'contain' }} />
-                        </View>
+                    <View style={styles.flightOfTheDayContainer}>
                         <View>
                             <AppText style={styles.gloryTitle}>
-                                Flight of the Day
-                            </AppText>
-                            <AppText>PILOT: Dammike Saman · (6hrs ago at KARIO)</AppText>
+                                <IconComponent name="camera" color="dodgerblue" />
+                                Flight of the Day</AppText>
+                            <AppText>(6hrs ago at KARIO)</AppText>
                         </View>
-                    </View>
+                        <AppText> Pilot: Dammike Saman · </AppText>
                 </View>
                 <ImageBackground
                     source={require('../assets/glory.jpg')}
                     style={styles.gloryImage}
-                />
+                    >
+                        <Image source={require('../assets/logo.png')} style={{ width: '20%', height: 50, resizeMode: 'contain', left: 10, top: 10, }} />
+                    </ImageBackground>
                 </ScrollView>
             </View>
         </Screen>
@@ -171,7 +143,11 @@ function SiteSearchScreen({ navigation }) {
 
 const styles = StyleSheet.create({
     flightOfTheDayContainer: {
-
+        flex: 1,
+        flexDirection: 'row',
+        // backgroundColor: 'yellow',
+        alignItems: 'center',
+        justifyContent: 'space-between'
     },
     sortPanel: {
         flexDirection: 'row',
@@ -181,7 +157,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.white,
     },
     gloryTitle: {
-        fontSize: 34,
+        fontSize: 20,
     },
     gloryImage: {
         width: '100%',
