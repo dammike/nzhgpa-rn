@@ -8,12 +8,10 @@ import AppFormPicker from '../components/AppFormPicker';
 import AppText from '../components/AppText';
 import AppTextInput from '../components/AppTextInput';
 import CardTile from '../components/CardTile';
-import ListItem from '../components/ListItem'
 import Screen from '../components/Screen'
 import colors from '../config/colors';
 import flyingSitesApi from '../api/flyingSites';
 import IconComponent from '../components/IconComponent';
-import AppButton from '../components/AppButton';
 import RetryConnection from '../components/RetryConnection';
 
 const regions = [
@@ -98,26 +96,26 @@ function SiteSearchScreen({ navigation }) {
                         {error &&
                             <RetryConnection onPress={fetchFlyingSites} />
                         }
-                    <FlatList
-                        horizontal
+                        <FlatList
+                            horizontal
                             data={flyingSites}
-                        keyExtractor={item => item.id.toString()}
-                        renderItem={({ item }) => (
-                            <CardTile
-                                description={'Site Record: ' + item.siteRecord + '\nStatus: ' + item.isActive}
-                                imageURI={item.imageURI}
-                                title={item.name}
-                                style={{ width: 200, marginRight: 10, }}
-                                onPress={() => navigation.navigate('SiteSearchResultDetails', item)}
-                            />
-                        )}
-                        showsHorizontalScrollIndicator={false}
-                    />
+                            keyExtractor={item => item.id.toString()}
+                            renderItem={({ item }) => (
+                                <CardTile
+                                    description={'Site Record: ' + item.siteRecord + '\nStatus: ' + item.isActive}
+                                    imageURI={item.imageURI}
+                                    title={item.name}
+                                    style={{ width: 200, marginRight: 10, }}
+                                    onPress={() => navigation.navigate('SiteSearchResultDetails', item)}
+                                />
+                            )}
+                            showsHorizontalScrollIndicator={false}
+                        />
                         <SortPanel />
                         <View style={styles.results}>
                             <AppText style={{ fontWeight: 'bold' }}>8 Total Results!`</AppText>
                         </View>
-                    </View>
+                    </View >
                     <Divider width={1} />
                     <View style={styles.flightOfTheDayContainer}>
                         <View>
@@ -127,16 +125,16 @@ function SiteSearchScreen({ navigation }) {
                             <AppText>(6hrs ago at KARIO)</AppText>
                         </View>
                         <AppText> Pilot: Dammike Saman · </AppText>
-                </View>
-                <ImageBackground
-                    source={require('../assets/glory.jpg')}
-                    style={styles.gloryImage}
+                    </View>
+                    <ImageBackground
+                        source={require('../assets/glory.jpg')}
+                        style={styles.gloryImage}
                     >
                         <Image source={require('../assets/logo.png')} style={{ width: '20%', height: 50, resizeMode: 'contain', left: 10, top: 10, }} />
                     </ImageBackground>
-                </ScrollView>
-            </View>
-        </Screen>
+                </ScrollView >
+            </View >
+        </Screen >
     )
 }
 

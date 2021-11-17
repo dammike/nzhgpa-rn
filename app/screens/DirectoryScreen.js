@@ -1,6 +1,5 @@
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import React, { useState, useEffect } from 'react'
-import { Dimensions, ScrollView, StyleSheet, TouchableWithoutFeedback, View } from 'react-native'
+import { Dimensions, StyleSheet, TouchableWithoutFeedback, View } from 'react-native'
 import { Divider } from 'react-native-elements';
 import { FlatList } from 'react-native-gesture-handler';
 import AppFormPicker from '../components/AppFormPicker';
@@ -69,7 +68,6 @@ export default function DirectoryScreen() {
         </View>
     );
 
-
     return (
         <Screen>
             <ListItem
@@ -88,8 +86,6 @@ export default function DirectoryScreen() {
                     {error &&
                         <RetryConnection onPress={fetchPilots} />
                     }
-
-
                     <FlatList style={{ height: Dimensions.get('window').height * .6 }}
                         data={filteredResults}
                         keyExtractor={item => item.id.toString()}
@@ -102,7 +98,6 @@ export default function DirectoryScreen() {
                             </View>
                         )}
                     />
-
                 </View>
             </View>
         </Screen>

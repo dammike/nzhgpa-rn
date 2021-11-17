@@ -4,19 +4,26 @@ import { Image, StyleSheet, View } from 'react-native'
 import colors from '../config/colors'
 import AppText from './AppText'
 
-export default function ListItem({ IconComponent, description, image, imageBgColor = colors.black, style, title }) {
+export default function ListItem({
+    IconComponent,
+    description,
+    image,
+    imageBgColor = colors.black,
+    style,
+    title }) {
+
     return (
         <View style={[styles.listContainer, style]}>
             {image &&
                 <View style={{ justifyContent: 'center' }}>
-                <View style={[styles.photoContainer, { backgroundColor: imageBgColor }]}>
-                    <Image source={image} style={styles.image} />
-                </View>
+                    <View style={[styles.photoContainer, { backgroundColor: imageBgColor }]}>
+                        <Image source={image} style={styles.image} />
+                    </View>
                 </View>
             }
             {(!image && IconComponent) &&
                 < View style={{ justifyContent: 'center' }}>
-                <View style={[styles.photoContainer, { backgroundColor: imageBgColor }]}>
+                    <View style={[styles.photoContainer, { backgroundColor: imageBgColor }]}>
                         {IconComponent}
                     </View>
                 </View>
@@ -27,8 +34,8 @@ export default function ListItem({ IconComponent, description, image, imageBgCol
                     style={styles.title}>{title}</AppText>
                 {description &&
                     <AppText
-                    numberOfLines={4}
-                    style={styles.description}>{description}</AppText>
+                        numberOfLines={4}
+                        style={styles.description}>{description}</AppText>
                 }
             </View>
         </View>

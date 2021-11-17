@@ -187,7 +187,6 @@ export default function SiteSearchResultDetailsScreen({ route }) {
                         renderItem={({ item }) => (
                             <View>{item.ele}</View>
                         )}
-                        // horizontal
                         snapToAlignment="center"
                         snapToInterval={Dimensions.get('window').width}
                     />

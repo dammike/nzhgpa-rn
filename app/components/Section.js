@@ -1,4 +1,3 @@
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { Divider } from 'react-native-elements/dist/divider/Divider';
@@ -8,7 +7,6 @@ import ListItem from './ListItem';
 
 export default function Section({ title, bgColor, description, IconComponent }) {
     return (
-
         <>
             <ListItem
                 imageBgColor={bgColor}
@@ -23,7 +21,6 @@ export default function Section({ title, bgColor, description, IconComponent }) 
             }
         </>
     );
-
 }
 
 const styles = StyleSheet.create({
