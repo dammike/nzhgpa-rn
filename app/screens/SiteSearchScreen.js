@@ -1,6 +1,5 @@
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import React, { useState, useEffect } from 'react'
-import { Image, ImageBackground, TouchableWithoutFeedback, View } from 'react-native';
+import { Dimensions, Image, ImageBackground, View } from 'react-native';
 import { FlatList, ScrollView, StyleSheet } from 'react-native'
 import { Divider } from 'react-native-elements';
 
@@ -13,14 +12,10 @@ import colors from '../config/colors';
 import flyingSitesApi from '../api/flyingSites';
 import IconComponent from '../components/IconComponent';
 import RetryConnection from '../components/RetryConnection';
-
-const regions = [
-    { title: 'Auckland', value: 1 },
-    { title: 'Waikato', value: 2 },
-    { title: 'Wellington', value: 3 },
-];
+import { ActivityIndicator } from 'react-native';
 
 const windDrections = [
+    { title: 'All', value: -1 },
     { title: 'North', abbrev: 'N', value: 1 },
     { title: 'North North-East', abbrev: 'NNE', value: 2 },
     { title: 'North East', abbrev: 'NE', value: 3 },
@@ -29,7 +24,9 @@ const windDrections = [
 ];
 
 function SiteSearchScreen({ navigation }) {
-    const [flyingSites, setFlyingSites] = useState();
+    const [flyingSites, setFlyingSites] = useState([]);
+    const [regions, setRegions] = useState([]);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
 
     const [selectedRegion, setSelectedRegion] = useState();
@@ -37,20 +34,39 @@ function SiteSearchScreen({ navigation }) {
 
     useEffect(() => {
         fetchFlyingSites();
+        fetchRegions();
     }, []);
 
     const fetchFlyingSites = async () => {
+        setLoading(true);
         const response = await flyingSitesApi.getFlyingSites();
         if (!response.ok) return setError(true);
         setError(false);
         setFlyingSites(response.data);
+        setLoading(false);
     }
 
-    const filterByRegion = item => {
+    const fetchRegions = async () => {
+        const response = await flyingSitesApi.getRegions();
+        setRegions(response.data);
+    }
+
+    const filterByRegion = async (item) => {
         setSelectedRegion(item);
+        setLoading(true);
         //Filter or Call Rest API
-        // flyingSitesApi.getFlyingSites(region);
-        console.log(item);
+        if (item.value != -1) {
+            const response = await flyingSitesApi.getFlyingSitesForRegion(item.title);
+            if (!response.ok) {
+                setFlyingSites(null);
+                setLoading(false);
+                return;
+            }
+            setFlyingSites(response.data);
+        } else {
+            fetchFlyingSites();
+        }
+        setLoading(false);
     }
 
     const filterByWind = item => {
@@ -61,29 +77,24 @@ function SiteSearchScreen({ navigation }) {
 
     const SortPanel = () => (
         <View style={styles.sortPanel}>
-            <View style={styles.headerBtnBox}>
-                {/* <AppText style={styles.headerBtnTitle}>Region:</AppText> */}
-                <AppFormPicker
-                    items={regions}
-                    selectedItem={selectedRegion}
-                    onChangeSelect={filterByRegion}
-                    placeholder="Choose Region"
-                    summary="Choose a Region"
-                    IconComponent={<MaterialCommunityIcons name="map-marker" size={20} />} />
-            </View>
-
-            <View style={styles.headerPanel}>
-                <AppText style={styles.headerPanelTxt}>
-                </AppText>
-                <AppFormPicker
-                    style={styles.headerPanelTxt}
-                    items={windDrections}
-                    selectedItem={selectedWind}
-                    onChangeSelect={filterByWind}
-                    placeholder="Wind Direction"
-                    summary="Select Preffered Wind Direction..."
-                    IconComponent={<MaterialCommunityIcons name="compass" size={20} />} />
-            </View>
+            <AppFormPicker
+                style={styles.sortBtns}
+                items={regions}
+                selectedItem={selectedRegion}
+                onChangeSelect={filterByRegion}
+                placeholder="Region"
+                summary="Choose Region"
+                IconComponent={<IconComponent name="map-marker" size={20} />}
+            />
+            <AppFormPicker
+                style={styles.sortBtns}
+                items={windDrections}
+                selectedItem={selectedWind}
+                onChangeSelect={filterByWind}
+                placeholder="Wind Direction"
+                summary="Select Preffered Wind Direction..."
+                IconComponent={<IconComponent name="compass" size={20} />}
+            />
         </View>
     );
 
@@ -96,25 +107,32 @@ function SiteSearchScreen({ navigation }) {
                         {error &&
                             <RetryConnection onPress={fetchFlyingSites} />
                         }
-                        <FlatList
-                            horizontal
-                            data={flyingSites}
-                            keyExtractor={item => item.id.toString()}
-                            renderItem={({ item }) => (
-                                <CardTile
-                                    description={'Site Record: ' + item.siteRecord + '\nStatus: ' + item.isActive}
-                                    imageURI={item.imageURI}
-                                    title={item.name}
-                                    style={{ width: 200, marginRight: 10, }}
-                                    onPress={() => navigation.navigate('SiteSearchResultDetails', item)}
-                                />
-                            )}
-                            showsHorizontalScrollIndicator={false}
-                        />
-                        <SortPanel />
                         <View style={styles.results}>
-                            <AppText style={{ fontWeight: 'bold' }}>8 Total Results!`</AppText>
+                            <AppText style={{ fontWeight: 'bold' }}>{flyingSites ? `Found ${flyingSites.length} results.` : 'No results found.'}</AppText>
+                            {loading &&
+                                <ActivityIndicator animating={loading} size="large" color={colors.secondary} />
+                            }
                         </View>
+                        {flyingSites &&
+                            <View style={{ height: 200, flex: 1 }}>
+                            <FlatList
+                                horizontal
+                                data={flyingSites}
+                                keyExtractor={item => item.id.toString()}
+                                renderItem={({ item }) => (
+                                    <CardTile
+                                        description={'Site Record: ' + item.siteRecord + '\nStatus: ' + item.isActive}
+                                        imageURI={item.imageURI}
+                                        title={item.name}
+                                        style={{ width: 200, marginRight: 10, }}
+                                        onPress={() => navigation.navigate('SiteSearchResultDetails', item)}
+                                    />
+                                )}
+                                showsHorizontalScrollIndicator={false}
+                            />
+                            </View>
+                        }
+                        <SortPanel />
                     </View >
                     <Divider width={1} />
                     <View style={styles.flightOfTheDayContainer}>
@@ -146,12 +164,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between'
     },
-    sortPanel: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingHorizontal: 10,
-    },
     gloryTitle: {
         fontSize: 20,
     },
@@ -162,24 +174,19 @@ const styles = StyleSheet.create({
         borderColor: colors.white,
         borderWidth: 1,
     },
-    headerBtnBox: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
     headerBtnTitle: {
         fontSize: 14,
         fontWeight: 'bold',
         paddingVertical: 10,
         marginRight: 8,
     },
-    headerPanel: {
+    sortPanel: {
         flexDirection: 'row',
-        width: '50%',
-        justifyContent: 'flex-end',
+        justifyContent: 'space-between',
         alignItems: 'center',
     },
-    headerPanelTxt: {
-        fontSize: 14,
+    sortBtns: {
+        width: '50%'
     },
     container: {
         flex: 1,
@@ -189,7 +196,6 @@ const styles = StyleSheet.create({
         fontWeight: '800',
     },
     results: {
-        // paddingVertical: ,
         paddingHorizontal: 5,
     }
 })
