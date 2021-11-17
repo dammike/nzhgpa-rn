@@ -11,6 +11,7 @@ import ListItem from '../components/ListItem';
 import Screen from '../components/Screen'
 import colors from '../config/colors';
 import pilotsApi from '../api/pilots';
+import RetryConnection from '../components/RetryConnection';
 
 const searchOptions = [
     { title: 'Pilots', value: 1 },
@@ -24,6 +25,7 @@ export default function DirectoryScreen() {
     const [pilots, setPilots] = useState();
     const [filteredResults, setFilteredResults] = useState();
     const [selectedSearchOption, setSelectedSearchOption] = useState();
+    const [error, setError] = useState(false);
 
     useEffect(() => {
         fetchPilots();
@@ -31,6 +33,8 @@ export default function DirectoryScreen() {
 
     const fetchPilots = async () => {
         const response = await pilotsApi.getPilots();
+        if (!response.ok) return setError(true);
+        setError(false);
         setPilots(response.data);
         setFilteredResults(response.data);
     }
@@ -79,10 +83,12 @@ export default function DirectoryScreen() {
                     <AppTextInput onChangeText={search} placeholder="Search ..." />
                 </View>
                 <View style={styles.results}>
-
                     <SortPanel />
-
                     <Divider width={1} />
+                    {error &&
+                        <RetryConnection onPress={fetchPilots} />
+                    }
+
 
                     <FlatList style={{ height: Dimensions.get('window').height * .6 }}
                         data={filteredResults}

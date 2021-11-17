@@ -14,6 +14,7 @@ import colors from '../config/colors';
 import flyingSitesApi from '../api/flyingSites';
 import IconComponent from '../components/IconComponent';
 import AppButton from '../components/AppButton';
+import RetryConnection from '../components/RetryConnection';
 
 const regions = [
     { title: 'Auckland', value: 1 },
@@ -50,6 +51,7 @@ function SiteSearchScreen({ navigation }) {
     const filterByRegion = item => {
         setSelectedRegion(item);
         //Filter or Call Rest API
+        // flyingSitesApi.getFlyingSites(region);
         console.log(item);
     }
 
@@ -94,10 +96,7 @@ function SiteSearchScreen({ navigation }) {
                     <AppTextInput placeholder="Search..." />
                     <View style={styles.resultsContainer}>
                         {error &&
-                            <View style={{ alignItems: 'center', marginBottom: 18, }}>
-                                <AppText>Couldn't retrieve the listings...</AppText>
-                                <AppButton backgroundColor="tomato" iconName="reload-alert" title="Try Again" onPress={() => fetchFlyingSites()} />
-                            </View>
+                            <RetryConnection onPress={fetchFlyingSites} />
                         }
                     <FlatList
                         horizontal
@@ -154,7 +153,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingHorizontal: 10,
-        backgroundColor: colors.white,
     },
     gloryTitle: {
         fontSize: 20,
