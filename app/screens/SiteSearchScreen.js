@@ -25,6 +25,7 @@ const windDrections = [
 
 function SiteSearchScreen({ navigation }) {
     const [flyingSites, setFlyingSites] = useState([]);
+    const [filteredResults, setFilteredResults] = useState();
     const [regions, setRegions] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
@@ -43,6 +44,7 @@ function SiteSearchScreen({ navigation }) {
         if (!response.ok) return setError(true);
         setError(false);
         setFlyingSites(response.data);
+        setFilteredResults(response.data);
         setLoading(false);
     }
 
@@ -59,10 +61,12 @@ function SiteSearchScreen({ navigation }) {
             const response = await flyingSitesApi.getFlyingSitesForRegion(item.title);
             if (!response.ok) {
                 setFlyingSites(null);
+                setFilteredResults(null);
                 setLoading(false);
                 return;
             }
             setFlyingSites(response.data);
+            setFilteredResults(response.data);
         } else {
             fetchFlyingSites();
         }
@@ -73,6 +77,14 @@ function SiteSearchScreen({ navigation }) {
         setSelectedWind(item);
         //Filter or Call Rest API
         console.log(item);
+    }
+
+    const search = (inputTxt) => {
+        //Filter flyingSites for name eq inputTxt
+        setFilteredResults(flyingSites.filter(site => site.name.toLowerCase().includes(inputTxt.toLowerCase())));
+        // if (inputTxt.length == 0) {
+        //     setFlyingSites(flyingSites);
+        // }
     }
 
     const SortPanel = () => (
@@ -102,13 +114,14 @@ function SiteSearchScreen({ navigation }) {
         <Screen>
             <View style={styles.container}>
                 <ScrollView showsVerticalScrollIndicator={false}>
-                    <AppTextInput placeholder="Search..." />
+                    <AppTextInput placeholder="Search..." onChangeText={search} />
                     <View style={styles.resultsContainer}>
                         {error &&
                             <RetryConnection onPress={fetchFlyingSites} />
                         }
                         <View style={styles.results}>
-                            <AppText style={{ fontWeight: 'bold' }}>{flyingSites ? `Found ${flyingSites.length} results.` : 'No results found.'}</AppText>
+                            <AppText style={{ fontWeight: '800', fontSize: 20 }}>{filteredResults ? `Found ${filteredResults.length} results.` : 'No results found.'}</AppText>
+                            <SortPanel />
                             {loading &&
                                 <ActivityIndicator animating={loading} size="large" color={colors.secondary} />
                             }
@@ -117,7 +130,7 @@ function SiteSearchScreen({ navigation }) {
                             <View style={{ height: 200, flex: 1 }}>
                             <FlatList
                                 horizontal
-                                data={flyingSites}
+                                data={filteredResults}
                                 keyExtractor={item => item.id.toString()}
                                 renderItem={({ item }) => (
                                     <CardTile
@@ -132,7 +145,6 @@ function SiteSearchScreen({ navigation }) {
                             />
                             </View>
                         }
-                        <SortPanel />
                     </View >
                     <Divider width={1} />
                     <View style={styles.flightOfTheDayContainer}>
