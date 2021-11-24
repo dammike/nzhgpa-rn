@@ -13,36 +13,73 @@ import pilotsApi from '../api/pilots';
 import RetryConnection from '../components/RetryConnection';
 
 const searchOptions = [
-    { title: 'Pilots', value: 1 },
-    { title: 'WOF Inspectors', value: 2 },
-    { title: 'PG Schools', value: 3 },
-    { title: 'HG Schools', value: 4 }
+    { title: 'Pilots', value: "pilot" },
+    { title: 'WOF Inspectors', value: "wof-inspector" },
+    { title: 'PG Schools', value: "pg-school" },
+    { title: 'HG Schools', value: "hg-school" }
 ];
 
 
 export default function DirectoryScreen() {
-    const [pilots, setPilots] = useState();
-    const [filteredResults, setFilteredResults] = useState();
+    const [results, setResults] = useState();
+    const [filteredResults, setFilteredResults] = useState([]);
+    const [group, setGroup] = useState();
+    const [searchTxt, setSearchTxt] = useState('');
     const [selectedSearchOption, setSelectedSearchOption] = useState();
     const [error, setError] = useState(false);
 
     useEffect(() => {
-        fetchPilots();
+        fetchResults();
     }, []);
 
-    const fetchPilots = async () => {
+    const fetchResults = async () => {
         const response = await pilotsApi.getPilots();
         if (!response.ok) return setError(true);
         setError(false);
-        setPilots(response.data);
+        setResults(response.data);
         setFilteredResults(response.data);
+        setGroup(response.data);
     }
 
-    const search = (searchText) => {
-        setFilteredResults(pilots.filter(item => (item.name.toLowerCase().includes(searchText.toLowerCase()))));
+    const search = (txt) => {
+        setSearchTxt(txt);
+        setFilteredResults(group.filter(item =>
+            (item.name.toLowerCase().includes(txt.toLowerCase()))
+        ));
     }
 
-    const handleFilteredSearch = item => {
+    const changeFilter = item => {
+        setSearchTxt('');
+
+        switch (item.value) {
+            case "pilot":
+                const onlyPilots = results.filter(p => p.type === item.value);
+                setFilteredResults(onlyPilots);
+                setGroup(onlyPilots);
+                break;
+
+            case "wof-inspector":
+                const onlyWof = results.filter(p => p.type === item.value);
+                setFilteredResults(onlyWof);
+                setGroup(onlyWof);
+                break;
+
+            case "pg-school":
+                const onlyPgSchools = results.filter(p => p.type === item.value);
+                setFilteredResults(onlyPgSchools);
+                setGroup(onlyPgSchools);
+                break;
+
+            case "hg-school":
+                const onlyHgSchools = results.filter(p => p.type === item.value);
+                setFilteredResults(onlyHgSchools);
+                setGroup(onlyHgSchools);
+                break;
+
+            default:
+                fetchResults();
+        }
+
         setSelectedSearchOption(item);
         //Filter or Call Rest API
         console.log(item);
@@ -63,7 +100,7 @@ export default function DirectoryScreen() {
                     {/* WOF Inspectors Only */}
                     Filter By:
                 </AppText>
-                <AppFormPicker items={searchOptions} selectedItem={selectedSearchOption} onChangeSelect={handleFilteredSearch} placeholder="ALL" />
+                <AppFormPicker items={searchOptions} selectedItem={selectedSearchOption} onChangeSelect={changeFilter} placeholder="ALL" />
             </View>
         </View>
     );
@@ -78,14 +115,15 @@ export default function DirectoryScreen() {
 
             <View style={styles.container}>
                 <View style={styles.searchPanel}>
-                    <AppTextInput onChangeText={search} placeholder="Search ..." />
+                    <AppTextInput value={searchTxt} onChangeText={search} placeholder="Search ..." />
                 </View>
                 <View style={styles.results}>
                     <SortPanel />
                     <Divider width={1} />
                     {error &&
-                        <RetryConnection onPress={fetchPilots} />
+                        <RetryConnection onPress={fetchResults} />
                     }
+
                     <FlatList style={{ height: Dimensions.get('window').height * .57 }}
                         data={filteredResults}
                         keyExtractor={item => item.id.toString()}
