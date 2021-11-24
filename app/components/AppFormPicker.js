@@ -10,6 +10,11 @@ import ListItem from './ListItem';
 export default function AppFormPicker({ IconComponent, summary, items, selectedItem, onChangeSelect, placeholder = 'Select', style }) {
     const [visible, setVisible] = useState(false);
 
+    const reset = () => {
+        onChangeSelect({ title: 'All', value: -1 });
+        setVisible(false);
+    }
+
     const handleSelect = item => {
         onChangeSelect(item);
         setVisible(false);
@@ -17,24 +22,19 @@ export default function AppFormPicker({ IconComponent, summary, items, selectedI
 
     return (
         <View style={[styles.container, style]}>
-            {selectedItem &&
-                <TouchableWithoutFeedback onPress={() => setVisible(true)}>
-                    <View style={styles.selectBox}>
+            <TouchableWithoutFeedback onPress={() => setVisible(true)}>
+                <View style={styles.selectBox}>
+                    <>
                     {IconComponent}
-                        <AppText style={styles.selectBoxTxt}>{selectedItem.title}</AppText>
+                        <AppText style={styles.selectBoxTxt}>
+                            {selectedItem ? selectedItem.title : placeholder}
+                        </AppText>
+                    </>
+                    <>
                         <MaterialCommunityIcons name="chevron-down" size={15} />
-                    </View>
-                </TouchableWithoutFeedback>
-            }
-            {!selectedItem &&
-                <TouchableWithoutFeedback onPress={() => setVisible(true)}>
-                    <View style={styles.selectBox}>
-                    {IconComponent}
-                        <AppText style={styles.selectBoxTxt}>{placeholder}</AppText>
-                        <MaterialCommunityIcons name="chevron-down" size={15} />
-                    </View>
-                </TouchableWithoutFeedback>
-            }
+                    </>
+                </View>
+            </TouchableWithoutFeedback>
 
             <Modal animationType="slide" visible={visible}>
                 <Button onPress={() => setVisible(false)} title="Close" />
@@ -46,6 +46,11 @@ export default function AppFormPicker({ IconComponent, summary, items, selectedI
                     }
                 </View>
                 <View>
+                    <TouchableWithoutFeedback onPress={() => reset()}>
+                        <View>
+                            <ListItem title="All" value="-1" />
+                        </View>
+                    </TouchableWithoutFeedback>
                     {items.map(item =>
                         <TouchableWithoutFeedback key={item.value} onPress={() => handleSelect(item)}>
                             <View>
@@ -64,7 +69,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#f1f4f7',
         padding: 5,
         paddingHorizontal: 10,
-        borderRadius: 8,
+        borderRadius: 5,
+        marginHorizontal: 2,
         borderWidth: 1,
         borderColor: '#f7f7f7',
         elevation: 5,
@@ -72,7 +78,8 @@ const styles = StyleSheet.create({
     },
     selectBox: {
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
+        justifyContent: 'space-between'
     },
     selectBoxTxt: {
         // textDecorationLine: 'underline',

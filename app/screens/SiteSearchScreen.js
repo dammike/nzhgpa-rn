@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { Dimensions, Image, ImageBackground, View } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react'
+import { Animated, Image, ImageBackground, View } from 'react-native';
 import { FlatList, ScrollView, StyleSheet } from 'react-native'
 import { Divider } from 'react-native-elements';
 
@@ -12,7 +12,7 @@ import colors from '../config/colors';
 import flyingSitesApi from '../api/flyingSites';
 import IconComponent from '../components/IconComponent';
 import RetryConnection from '../components/RetryConnection';
-import { ActivityIndicator } from 'react-native';
+import ActivityLoader from '../components/ActivityLoader';
 
 const windDrections = [
     { title: 'All', value: -1 },
@@ -29,6 +29,7 @@ function SiteSearchScreen({ navigation }) {
     const [regions, setRegions] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
+    const fadeAnim = useRef(new Animated.Value(0)).current;
 
     const [selectedRegion, setSelectedRegion] = useState();
     const [selectedWind, setSelectedWind] = useState();
@@ -36,12 +37,16 @@ function SiteSearchScreen({ navigation }) {
     useEffect(() => {
         fetchFlyingSites();
         fetchRegions();
+        fadeIn();
     }, []);
 
     const fetchFlyingSites = async () => {
         setLoading(true);
         const response = await flyingSitesApi.getFlyingSites();
-        if (!response.ok) return setError(true);
+        if (!response.ok) {
+            setLoading(false);
+            return setError(true)
+        };
         setError(false);
         setFlyingSites(response.data);
         setFilteredResults(response.data);
@@ -50,6 +55,10 @@ function SiteSearchScreen({ navigation }) {
 
     const fetchRegions = async () => {
         const response = await flyingSitesApi.getRegions();
+        if (!response.ok) {
+            setLoading(false);
+            return setError(true);
+        }
         setRegions(response.data);
     }
 
@@ -60,8 +69,8 @@ function SiteSearchScreen({ navigation }) {
         if (item.value != -1) {
             const response = await flyingSitesApi.getFlyingSitesForRegion(item.title);
             if (!response.ok) {
-                setFlyingSites(null);
-                setFilteredResults(null);
+                setFlyingSites([]);
+                setFilteredResults([]);
                 setLoading(false);
                 return;
             }
@@ -80,11 +89,20 @@ function SiteSearchScreen({ navigation }) {
     }
 
     const search = (inputTxt) => {
-        //Filter flyingSites for name eq inputTxt
-        setFilteredResults(flyingSites.filter(site => site.name.toLowerCase().includes(inputTxt.toLowerCase())));
-        // if (inputTxt.length == 0) {
-        //     setFlyingSites(flyingSites);
-        // }
+        setFilteredResults(
+            flyingSites.filter(site =>
+                site.name.toLowerCase().includes(inputTxt.toLowerCase())
+            )
+        );
+        fadeIn();
+    }
+
+    const fadeIn = () => {
+        Animated.timing(fadeAnim, {
+            toValue: 1,
+            duration: 3000,
+            useNativeDriver: true
+        }).start();
     }
 
     const SortPanel = () => (
@@ -94,10 +112,11 @@ function SiteSearchScreen({ navigation }) {
                 items={regions}
                 selectedItem={selectedRegion}
                 onChangeSelect={filterByRegion}
-                placeholder="Region"
+                placeholder="Select Region"
                 summary="Choose Region"
                 IconComponent={<IconComponent name="map-marker" size={20} />}
             />
+            {selectedRegion &&
             <AppFormPicker
                 style={styles.sortBtns}
                 items={windDrections}
@@ -107,6 +126,7 @@ function SiteSearchScreen({ navigation }) {
                 summary="Select Preffered Wind Direction..."
                 IconComponent={<IconComponent name="compass" size={20} />}
             />
+            }
         </View>
     );
 
@@ -116,25 +136,28 @@ function SiteSearchScreen({ navigation }) {
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <AppTextInput placeholder="Search..." onChangeText={search} />
                     <View style={styles.resultsContainer}>
-                        {error &&
-                            <RetryConnection onPress={fetchFlyingSites} />
+                        {!error &&
+                            <View style={styles.results}>
+                                <AppText style={{ fontWeight: '800', fontSize: 20 }}>
+                                    {filteredResults ? `Found ${filteredResults.length} results.` : 'No results found.'}
+                                </AppText>
+                            </View>
                         }
-                        <View style={styles.results}>
-                            <AppText style={{ fontWeight: '800', fontSize: 20 }}>{filteredResults ? `Found ${filteredResults.length} results.` : 'No results found.'}</AppText>
-                            <SortPanel />
-                            {loading &&
-                                <ActivityIndicator animating={loading} size="large" color={colors.secondary} />
+                        <SortPanel />
+                        <View style={{ height: 200 }}>
+                            {error &&
+                                <RetryConnection onPress={fetchFlyingSites} />
                             }
-                        </View>
-                        {flyingSites &&
-                            <View style={{ height: 200, flex: 1 }}>
+                            {(!error && loading) &&
+                                <ActivityLoader visible={loading} />
+                            }
                             <FlatList
                                 horizontal
                                 data={filteredResults}
                                 keyExtractor={item => item.id.toString()}
                                 renderItem={({ item }) => (
                                     <CardTile
-                                        description={'Site Record: ' + item.siteRecord + '\nStatus: ' + item.isActive}
+                                        description={item.siteInformation.siteType + ' site.\nStatus: ' + item.isActive}
                                         imageURI={item.imageURI}
                                         title={item.name}
                                         style={{ width: 200, marginRight: 10, }}
@@ -143,8 +166,7 @@ function SiteSearchScreen({ navigation }) {
                                 )}
                                 showsHorizontalScrollIndicator={false}
                             />
-                            </View>
-                        }
+                        </View>
                     </View >
                     <Divider width={1} />
                     <View style={styles.flightOfTheDayContainer}>
@@ -156,12 +178,14 @@ function SiteSearchScreen({ navigation }) {
                         </View>
                         <AppText> Pilot: Dammike Saman · </AppText>
                     </View>
+                    <Animated.View style={{ opacity: fadeAnim }} >
                     <ImageBackground
                         source={require('../assets/glory.jpg')}
                         style={styles.gloryImage}
                     >
                         <Image source={require('../assets/logo.png')} style={{ width: '20%', height: 50, resizeMode: 'contain', left: 10, top: 10, }} />
                     </ImageBackground>
+                    </Animated.View>
                 </ScrollView >
             </View >
         </Screen >

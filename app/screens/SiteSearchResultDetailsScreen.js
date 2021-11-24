@@ -169,27 +169,17 @@ export default function SiteSearchResultDetailsScreen({ route }) {
                 />
 
                 <View style={styles.sectionsContainer}>
-                    <FlatList
-                        data={[
-                            { id: 1, ele: <SiteInformation /> },
-                            { id: 2, ele: <Weather /> },
-                            { id: 3, ele: <MandatoryNotices /> },
-                            { id: 4, ele: <SiteRadioChannel /> },
-                            { id: 5, ele: <Restrictions /> },
-                            { id: 6, ele: <Cautions /> },
-                            { id: 7, ele: <Airspace /> },
-                            { id: 8, ele: <AccessConditions /> },
-                            { id: 9, ele: <SiteMonitor /> },
-                            { id: 10, ele: <AdditionalNotes /> },
-                            { id: 11, ele: <SiteAchievements /> },
-                        ]}
-                        keyExtractor={item => item.id.toString()}
-                        renderItem={({ item }) => (
-                            <View>{item.ele}</View>
-                        )}
-                        snapToAlignment="center"
-                        snapToInterval={Dimensions.get('window').width}
-                    />
+                    <SiteInformation />
+                    <Weather />
+                    <MandatoryNotices />
+                    <SiteRadioChannel />
+                    <Restrictions />
+                    <Cautions />
+                    <Airspace />
+                    <AccessConditions />
+                    <SiteMonitor />
+                    <AdditionalNotes />
+                    <SiteAchievements />
                 </View>
 
                 <View style={styles.mapContainer}>
@@ -237,7 +227,7 @@ const styles = StyleSheet.create({
     },
     image: {
         width: '100%',
-        height: 100,
+        height: 175,
         resizeMode: 'contain',
         justifyContent: 'flex-end',
     },

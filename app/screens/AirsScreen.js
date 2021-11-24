@@ -1,9 +1,10 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { FlatList, StyleSheet, Text, View } from 'react-native'
 
 import AppButton from '../components/AppButton'
 import Screen from '../components/Screen'
 import colors from '../config/colors'
+
 
 export default function AirsScreen({ navigation }) {
     return (
@@ -11,8 +12,13 @@ export default function AirsScreen({ navigation }) {
             <AppButton
                 iconName="plus-circle-multiple"
                 backgroundColor={colors.safe}
-                title="New Incident"
-                onPress={() => navigation.navigate('AirsForm')} />
+                title="Create"
+                onPress={() => navigation.navigate('AirsForm')}
+            />
+            <View style={styles.reportsContainer}>
+                <FlatList
+                />
+            </View>
         </Screen>
     )
 }

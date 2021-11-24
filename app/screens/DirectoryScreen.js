@@ -86,7 +86,7 @@ export default function DirectoryScreen() {
                     {error &&
                         <RetryConnection onPress={fetchPilots} />
                     }
-                    <FlatList style={{ height: Dimensions.get('window').height * .6 }}
+                    <FlatList style={{ height: Dimensions.get('window').height * .57 }}
                         data={filteredResults}
                         keyExtractor={item => item.id.toString()}
                         renderItem={({ item }) => (

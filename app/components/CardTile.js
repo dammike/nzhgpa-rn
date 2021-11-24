@@ -60,8 +60,8 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         backgroundColor: colors.grey,
         height: '40%',
-        borderTopRightRadius: 20,
-        borderTopLeftRadius: 20,
+        // borderTopRightRadius: 20,
+        // borderTopLeftRadius: 20,
         // opacity: .3,
     },
     transparentBG: {
