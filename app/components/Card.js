@@ -8,7 +8,7 @@ import ImageBackground from 'react-native/Libraries/Image/ImageBackground'
 import colors from '../config/colors'
 import AppText from './AppText'
 
-export default function Card({ description, image, onPress, style, title }) {
+export default function Card({ description, imageUrl, onPress, style, title }) {
     const [liked, setLiked] = useState(false);
 
     const handleLikeImage = image => {
@@ -18,7 +18,7 @@ export default function Card({ description, image, onPress, style, title }) {
         <TouchableWithoutFeedback onPress={onPress}>
             <View style={[styles.container, style]}>
                 <ImageBackground
-                    source={image}
+                    source={{ uri: imageUrl }}
                     style={styles.image}>
 
                     <View style={styles.authorContainer}>

@@ -43,18 +43,18 @@ export default function FeedDetailsScreen({ route }) {
                 showsVerticalScrollIndicator={false}
                 stickyHeaderIndices={[1]}
             >
-                <ImageBackground source={feed.image} style={styles.image} />
+                <ImageBackground source={{ uri: feed.imageUrl }} style={styles.image} />
 
                 <ListItem style={styles.headerListItem}
                     image={require('../assets/profile.jpeg')}
                     title={feed.title}
                     description={feed.description} />
 
-                {/* <View style={styles.articleContainer}>
+                <View style={styles.articleContainer}>
                     <AppText style={feed.articleText}>
                         {feed.article}
                     </AppText>
-                </View> */}
+                </View>
                 {/* <WebView
                     originWhitelist={['*']}
                     source={{ html: '<h1>This is a static HTML source!</h1>' }}
