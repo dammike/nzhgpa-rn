@@ -15,7 +15,6 @@ import RetryConnection from '../components/RetryConnection';
 import ActivityLoader from '../components/ActivityLoader';
 
 const windDrections = [
-    { title: 'All', value: -1 },
     { title: 'North', abbrev: 'N', value: 1 },
     { title: 'North North-East', abbrev: 'NNE', value: 2 },
     { title: 'North East', abbrev: 'NE', value: 3 },
