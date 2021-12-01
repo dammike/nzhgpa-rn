@@ -8,7 +8,7 @@ import ImageBackground from 'react-native/Libraries/Image/ImageBackground'
 import colors from '../config/colors'
 import AppText from './AppText'
 
-export default function Card({ description, imageUrl, onPress, style, title }) {
+export default function Card({ description, imageUrl, onPress, style, title, viewCount = 0 }) {
     const [liked, setLiked] = useState(false);
 
     const handleLikeImage = image => {
@@ -29,7 +29,7 @@ export default function Card({ description, imageUrl, onPress, style, title }) {
                     <TouchableWithoutFeedback onPress={handleLikeImage}>
                         <View style={styles.heartContainer}>
                             <MaterialCommunityIcons name="eye-outline" size={20} color={colors.background} />
-                            <AppText style={{ color: colors.white }}>57 views</AppText>
+                            <AppText style={{ color: colors.white }}>{viewCount} views</AppText>
                             <MaterialCommunityIcons name="heart-outline" size={20} color={colors.background} />
                         </View>
                     </TouchableWithoutFeedback>
