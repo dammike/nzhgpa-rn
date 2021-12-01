@@ -1,6 +1,6 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import React, { useState } from 'react'
-import { Button } from 'react-native';
+import { Button, ScrollView } from 'react-native';
 import { Modal } from 'react-native';
 import { StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native'
 import colors from '../config/colors';
@@ -46,18 +46,20 @@ export default function AppFormPicker({ IconComponent, summary, items, selectedI
                     }
                 </View>
                 <View>
-                    <TouchableWithoutFeedback onPress={() => reset()}>
-                        <View>
-                            <ListItem title="All" value="-1" />
-                        </View>
-                    </TouchableWithoutFeedback>
-                    {items.map(item =>
-                        <TouchableWithoutFeedback key={item.value} onPress={() => handleSelect(item)}>
+                    <ScrollView showsVerticalScrollIndicator={false}>
+                        <TouchableWithoutFeedback onPress={() => reset()}>
                             <View>
-                                <ListItem title={item.title} description="Select to view region" />
+                                <ListItem title="All" value="-1" />
                             </View>
                         </TouchableWithoutFeedback>
-                    )}
+                        {items.map(item =>
+                            <TouchableWithoutFeedback key={item.value} onPress={() => handleSelect(item)}>
+                                <View>
+                                    <ListItem title={item.title} description="Select to view region" />
+                                </View>
+                            </TouchableWithoutFeedback>
+                        )}
+                    </ScrollView>
                 </View>
             </Modal>
         </View>
