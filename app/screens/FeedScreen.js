@@ -13,9 +13,9 @@ import colors from '../config/colors'
 import feedsApi from '../api/feeds'
 
 const filterOptions = [
-    { title: 'MOST POPULAR', value: 1 },
-    { title: 'LATEST', value: 2 },
-    { title: 'COMPETITIONS', value: 3 },
+    { title: 'MOST POPULAR', value: 'popularity' },
+    { title: 'LATEST', value: 'latest' },
+    { title: 'COMPETITIONS', value: 'competitions' },
 ];
 
 const Header = () => (
@@ -51,10 +51,22 @@ export default function FeedScreen({ navigation }) {
         setLoading(false);
     }
 
-    const filter = item => {
-        setSelectedFilter(item);
-        //Filter or Call Rest API
-        console.log(item);
+    const filter = async (query) => {
+        setSelectedFilter(query);
+
+        // Return if All option is selected
+        if (query.value === -1) {
+            return fetchFeeds();
+        }
+
+        const response = await feedsApi.getFeedsBy(query.value);
+        if (!response.ok) {
+            setLoading(false);
+            return setError(true);
+        };
+        setError(false);
+        setFeeds(response.data);
+        setLoading(false);
     }
 
     const SortPanel = () => (
@@ -87,6 +99,7 @@ export default function FeedScreen({ navigation }) {
                         title={item.title}
                         description={item.description}
                         onPress={() => navigation.navigate('FeedDetails', item)}
+                        viewCount={item.viewCount}
                     />
                 )}
                 showsVerticalScrollIndicator={false}
