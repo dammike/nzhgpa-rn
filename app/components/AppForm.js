@@ -2,12 +2,12 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Formik } from 'formik';
 
-export default function AppForm({ children, validationSchema, initialValues }) {
+export default function AppForm({ children, validationSchema, initialValues, onSubmit }) {
     return (
         <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
-            onSubmit={values => console.log(values)}
+            onSubmit={onSubmit}
         >
             <>{children}</>
         </Formik>
