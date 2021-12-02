@@ -88,23 +88,29 @@ export default function FeedScreen({ navigation }) {
 
     return (
         <Screen>
-            {/* <Header /> */}
-            <FlatList
-                data={feeds}
-                keyExtractor={item => item.id.toString()}
-                ListHeaderComponent={SortPanel}
-                renderItem={({ item }) => (
-                    <Card
-                        imageUrl={item.imageUrl}
-                        title={item.title}
-                        description={item.description}
-                        onPress={() => navigation.navigate('FeedDetails', item)}
-                        viewCount={item.viewCount}
-                    />
-                )}
-                showsVerticalScrollIndicator={false}
-                stickyHeaderIndices={[0]}
-            />
+            {!feeds &&
+                <View style={styles.badConnection}>
+                    <AppText style={styles.badConnectionTxt}>Please check your network connection.</AppText>
+                </View>
+            }
+            {feeds &&
+                <FlatList
+                    data={feeds}
+                    keyExtractor={item => item.id.toString()}
+                    ListHeaderComponent={SortPanel}
+                    renderItem={({ item }) => (
+                        <Card
+                            imageUrl={item.imageUrl}
+                            title={item.title}
+                            description={item.description}
+                            onPress={() => navigation.navigate('FeedDetails', item)}
+                            viewCount={item.viewCount}
+                        />
+                    )}
+                    showsVerticalScrollIndicator={false}
+                    stickyHeaderIndices={[0]}
+                />
+            }
             <Header />
         </Screen>
     )
@@ -136,5 +142,16 @@ const styles = StyleSheet.create({
     },
     headerPanelTxt: {
         fontSize: 16,
+    },
+    badConnection: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        textAlignVertical: 'center'
+    },
+    badConnectionTxt: {
+        color: colors.danger,
+        fontWeight: '500',
+        fontSize: 20,
     }
 })
