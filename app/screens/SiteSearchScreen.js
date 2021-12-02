@@ -15,11 +15,22 @@ import RetryConnection from '../components/RetryConnection';
 import ActivityLoader from '../components/ActivityLoader';
 
 const windDrections = [
-    { title: 'North', abbrev: 'N', value: 1 },
-    { title: 'North North-East', abbrev: 'NNE', value: 2 },
-    { title: 'North East', abbrev: 'NE', value: 3 },
-    { title: 'East North-East', abbrev: 'ENE', value: 4 },
-    { title: 'East', abbrev: 'E', value: 5 }
+    { title: 'North', abbrev: 'N', value: 'N' },
+    { title: 'North North-East', abbrev: 'NNE', value: 'NNE' },
+    { title: 'North East', abbrev: 'NE', value: 'NE' },
+    { title: 'East North-East', abbrev: 'ENE', value: 'ENE' },
+    { title: 'East', abbrev: 'E', value: 'E' },
+    { title: 'East South East', abbrev: 'ESE', value: 'ESE' },
+    { title: 'South East', abbrev: 'SE', value: 'SE' },
+    { title: 'South South East', abbrev: 'SSE', value: 'SSE' },
+    { title: 'South', abbrev: 'S', value: 'S' },
+    { title: 'South South West', abbrev: 'SSW', value: 'SSW' },
+    { title: 'South West', abbrev: 'SW', value: 'SW' },
+    { title: 'West South West', abbrev: 'SSW', value: 'WSW' },
+    { title: 'West', abbrev: 'W', value: 'W' },
+    { title: 'West North West', abbrev: 'WNW', value: 'WNW' },
+    { title: 'North West', abbrev: 'NW', value: 'NW' },
+    { title: 'North North West', abbrev: 'NNW', value: 'NNW' }
 ];
 
 function SiteSearchScreen({ navigation }) {
@@ -30,6 +41,7 @@ function SiteSearchScreen({ navigation }) {
     const [error, setError] = useState(false);
     const fadeAnim = useRef(new Animated.Value(0)).current;
 
+    const [searchTxt, setSearchTxt] = useState('');
     const [selectedRegion, setSelectedRegion] = useState();
     const [selectedWind, setSelectedWind] = useState();
 
@@ -62,10 +74,14 @@ function SiteSearchScreen({ navigation }) {
     }
 
     const filterByRegion = async (item) => {
+        clearSearchInput();
+        clearWind();
+
         setSelectedRegion(item);
         setLoading(true);
+
         //Filter or Call Rest API
-        if (item.value != -1) {
+        if (item.value !== -1) {
             const response = await flyingSitesApi.getFlyingSitesForRegion(item.title);
             if (!response.ok) {
                 setFlyingSites([]);
@@ -81,13 +97,34 @@ function SiteSearchScreen({ navigation }) {
         setLoading(false);
     }
 
-    const filterByWind = item => {
-        setSelectedWind(item);
-        //Filter or Call Rest API
-        console.log(item);
+    const filterByWind = chosen => {
+        clearSearchInput();
+
+        setSelectedWind(chosen);
+        // Filter flyingSites by wind direction
+        if (chosen.value !== -1) {
+            const results = flyingSites.filter(site => {
+                const directions = site.weatherAndWindDirection.windDirections;
+                let matching = false;
+                directions.forEach(obj => {
+                    if (obj.direction === chosen.value) {
+                        matching = true
+                    };
+                });
+                return matching;
+            });
+            setFilteredResults(results);
+
+        } else {
+            fetchFlyingSites();
+        }
     }
 
     const search = (inputTxt) => {
+        clearRegion();
+        clearWind();
+
+        setSearchTxt(inputTxt);
         setFilteredResults(
             flyingSites.filter(site =>
                 site.name.toLowerCase().includes(inputTxt.toLowerCase())
@@ -102,6 +139,18 @@ function SiteSearchScreen({ navigation }) {
             duration: 3000,
             useNativeDriver: true
         }).start();
+    }
+
+    const clearRegion = () => {
+        setSelectedRegion({ title: 'All', value: -1 });
+    }
+
+    const clearWind = () => {
+        setSelectedWind({ title: 'All', value: -1 });
+    }
+
+    const clearSearchInput = () => {
+        setSearchTxt('');
     }
 
     const SortPanel = () => (
@@ -122,7 +171,7 @@ function SiteSearchScreen({ navigation }) {
                 selectedItem={selectedWind}
                 onChangeSelect={filterByWind}
                 placeholder="Wind Direction"
-                summary="Select Preffered Wind Direction..."
+                summary="Preffered Wind Direction..."
                 IconComponent={<IconComponent name="compass" size={20} />}
             />
             }
@@ -133,7 +182,7 @@ function SiteSearchScreen({ navigation }) {
         <Screen>
             <View style={styles.container}>
                 <ScrollView showsVerticalScrollIndicator={false}>
-                    <AppTextInput placeholder="Search..." onChangeText={search} />
+                    <AppTextInput value={searchTxt} placeholder="Search..." onChangeText={search} />
                     <View style={styles.resultsContainer}>
                         {!error &&
                             <View style={styles.results}>
