@@ -46,7 +46,7 @@ export default function AppFormPicker({ IconComponent, summary, items, selectedI
                     }
                 </View>
                 <View>
-                    <ScrollView showsVerticalScrollIndicator={false}>
+                    <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
                         <TouchableWithoutFeedback onPress={() => reset()}>
                             <View>
                                 <ListItem title="All" value="-1" />
@@ -88,6 +88,9 @@ const styles = StyleSheet.create({
         paddingLeft: 5,
         fontWeight: 'bold',
         letterSpacing: .9,
+    },
+    scrollView: {
+        height: 600
     },
     summary: {
         justifyContent: 'center',
