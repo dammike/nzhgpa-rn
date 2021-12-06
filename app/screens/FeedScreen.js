@@ -96,19 +96,21 @@ export default function FeedScreen({ navigation }) {
             {feeds &&
                 <FlatList
                     data={feeds}
-                    keyExtractor={item => item.id.toString()}
-                    ListHeaderComponent={SortPanel}
-                    renderItem={({ item }) => (
-                        <Card
-                            imageUrl={item.imageUrl}
-                            title={item.title}
-                            description={item.description}
-                            onPress={() => navigation.navigate('FeedDetails', item)}
-                            viewCount={item.viewCount}
-                        />
-                    )}
-                    showsVerticalScrollIndicator={false}
-                    stickyHeaderIndices={[0]}
+                keyExtractor={item => item._id.toString()}
+                ListHeaderComponent={SortPanel}
+                renderItem={({ item }) => (
+                    <Card
+                        imageUrl={item.imageUrl}
+                        title={item.title}
+                        description={item.description}
+                        onPress={() => navigation.navigate('FeedDetails', item)}
+                        viewCount={item.viewCount}
+                    />
+                )}
+                showsVerticalScrollIndicator={false}
+                stickyHeaderIndices={[0]}
+                refreshing={loading}
+                onRefresh={() => fetchFeeds()}
                 />
             }
             <Header />

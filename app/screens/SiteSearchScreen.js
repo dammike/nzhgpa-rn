@@ -202,7 +202,7 @@ function SiteSearchScreen({ navigation }) {
                             <FlatList
                                 horizontal
                                 data={filteredResults}
-                                keyExtractor={item => item.id.toString()}
+                                keyExtractor={item => item._id.toString()}
                                 renderItem={({ item }) => (
                                     <CardTile
                                         description={item.siteInformation.siteType + ' site.\nStatus: ' + item.isActive}
