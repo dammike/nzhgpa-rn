@@ -4,6 +4,7 @@ import { Dimensions, ImageBackground, ScrollView, StyleSheet, Text, View } from 
 import { Divider } from 'react-native-elements';
 import { FlatList } from 'react-native-gesture-handler';
 import MapView, { Marker } from 'react-native-maps';
+import { StatusBar } from 'expo-status-bar';
 
 import AppText from '../components/AppText'
 import Comments from '../components/Comments'
@@ -156,6 +157,7 @@ export default function SiteSearchResultDetailsScreen({ route }) {
 
     return (
         <View style={styles.container}>
+            <StatusBar style="light" animated={true} backgroundColor={colors.black} />
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 stickyHeaderIndices={[1]}
