@@ -14,6 +14,7 @@ import AppText from '../components/AppText'
 import flyingSitesApi from '../api/flyingSites';
 import AppFormPicker from '../components/AppFormPicker'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import colors from '../config/colors';
 
 const validationSchema = Yup.object().shape({
     // aircraftType: Yup.string().required().label('Aircraft Type'),
@@ -94,7 +95,6 @@ export default function AirsFormScreen() {
 
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate || date;
-        // const currentDate = selectedDate;
         setShow(Platform.OS === 'ios');
         setDate(currentDate);
         console.log('date selected: ', currentDate);
@@ -137,6 +137,7 @@ export default function AirsFormScreen() {
                             param="date"
                             placeholder="Date of Incident"
                             value={date.toDateString()}
+                            style={styles.dateTimePicker}
                         />
                     </TouchableWithoutFeedback>
                     <TouchableWithoutFeedback onPress={showTimepicker}>
@@ -146,6 +147,7 @@ export default function AirsFormScreen() {
                             param="time"
                             placeholder="Time of Incident"
                             value={`${date.getHours()} : ${date.getUTCMinutes()}`}
+                            style={styles.dateTimePicker}
                         />
                     </TouchableWithoutFeedback>
                     <AppFormField param="region" placeholder="Region" iconName="map-marker-alert" />
@@ -180,6 +182,10 @@ export default function AirsFormScreen() {
 }
 
 const styles = StyleSheet.create({
+    dateTimePicker: {
+        color: colors.primary,
+        fontWeight: 'bold'
+    },
     headerTxt: {
         fontSize: 20,
         padding: 20,
