@@ -8,18 +8,21 @@ import IconComponent from './IconComponent';
 export default function AppTextInput({ placeholder, IconComponent, ...otherProps }) {
     return (
         <View style={styles.inputContainer}>
-            {IconComponent}
+            <View style={{ paddingRight: 20 }}>
+                {IconComponent}
+            </View>
             <TextInput
-                {...otherProps}
                 placeholder={placeholder}
-                style={styles.input} />
+                style={styles.input}
+                {...otherProps}
+            />
         </View>
     )
 }
 
 const styles = StyleSheet.create({
     input: {
-        fontSize: 14,
+        fontSize: 14
     },
     inputContainer: {
         backgroundColor: colors.white,

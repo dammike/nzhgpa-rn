@@ -5,10 +5,11 @@ import { useFormikContext } from 'formik';
 import ErrorMessage from './ErrorMessage';
 import AppTextInput from './AppTextInput';
 import IconComponent from './IconComponent';
+import colors from '../config/colors';
 
-export default function AppFormField({ param, placeholder, iconName }) {
+export default function AppFormField({ param, placeholder, iconName, value, ...otherProps }) {
 
-    const { handleBlur, handleSubmit, handleChange, touched, setTouched, values, errors } = useFormikContext();
+    const { handleChange, touched, setTouched, values, errors } = useFormikContext();
 
     return (
         <>
@@ -16,7 +17,9 @@ export default function AppFormField({ param, placeholder, iconName }) {
                 onBlur={() => setTouched(param)}
                 onChangeText={handleChange(param)}
                 placeholder={placeholder}
-                IconComponent={<IconComponent name={iconName} />}
+                IconComponent={<IconComponent name={iconName} color={colors.black} />}
+                value={value}
+                {...otherProps}
             />
             {<ErrorMessage error={errors[param]} visible={touched[param]} />}
         </>

@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { KeyboardAvoidingView, ScrollView, StyleSheet } from 'react-native'
-import * as Yup from 'yup'
+import { Button, Platform, ScrollView, StyleSheet, TextInput } from 'react-native'
+import DateTimePicker from '@react-native-community/datetimepicker';
+import moment from 'moment';
+import * as Yup from 'yup';
+import { useFormikContext } from 'formik';
 
 import Screen from '../components/Screen'
 import AppFormField from '../components/AppFormField'
@@ -10,87 +13,38 @@ import ListItem from '../components/ListItem'
 import AppText from '../components/AppText'
 import flyingSitesApi from '../api/flyingSites';
 import AppFormPicker from '../components/AppFormPicker'
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 const validationSchema = Yup.object().shape({
-    aircraftType: Yup.string().required().label('Aircraft Type'),
-    pilotCertificate: Yup.string().required().label('Pilot Rating'),
-    otherInfo: Yup.string().required().label('Other Info'),
+    // aircraftType: Yup.string().required().label('Aircraft Type'),
+    // pilotCertificate: Yup.string().required().label('Pilot Rating'),
+    // otherInfo: Yup.string().required().label('Other Info'),
     // Basic Info
     date: Yup.string().required().label('Date'),
     time: Yup.string().required().label('Time'),
     region: Yup.string().required().label('Region'),
-    pilotExperience: Yup.string().required().label('Pilot Experience'),
+    // pilotExperience: Yup.string().required().label('Pilot Experience'),
     siteLocation: Yup.string().required().label('Site Location'),
     siteFamiliarity: Yup.string().required().label('Site Familiarity'),
-    // Report Summary
-    whatHappened: Yup.string().required().label('What Happened'),
-    typeOfOccurance: Yup.string().required().label('Type of Occurance'),
-    degreeOfInjury: Yup.string().required().label('Degree of Injury'),
-    locationOfMainInjury: Yup.string().required().label('Location of Main Injury'),
-    otherInjuryDetails: Yup.string().label('Other Injury Details'),
-    gliderDamage: Yup.string().required().label('Glider Damage'),
-    // Flight Stage
-    purposeOfFlight: Yup.string().required().label('Purpose of Flight'),
-    phaseOfFlight: Yup.string().required().label('Phase of Flight'),
-    //EQUIPMENT
-    helmet: Yup.string().required().label('Helmet'),
-    harness: Yup.string().required().label('Reserve'),
-    reserve: Yup.string().required().label('Harness'),
-    //WEATHER
-    windSpeed: Yup.string().required().label('Wind Speed'),
-    windDirection: Yup.string().required().label('Wind Direction'),
-    windConditions: Yup.string().required().label('Wind Conditions'),
+    // // Report Summary
+    // whatHappened: Yup.string().required().label('What Happened'),
+    // typeOfOccurance: Yup.string().required().label('Type of Occurance'),
+    // degreeOfInjury: Yup.string().required().label('Degree of Injury'),
+    // locationOfMainInjury: Yup.string().required().label('Location of Main Injury'),
+    // otherInjuryDetails: Yup.string().label('Other Injury Details'),
+    // gliderDamage: Yup.string().required().label('Glider Damage'),
+    // // Flight Stage
+    // purposeOfFlight: Yup.string().required().label('Purpose of Flight'),
+    // phaseOfFlight: Yup.string().required().label('Phase of Flight'),
+    // //EQUIPMENT
+    // helmet: Yup.string().required().label('Helmet'),
+    // harness: Yup.string().required().label('Reserve'),
+    // reserve: Yup.string().required().label('Harness'),
+    // //WEATHER
+    // windSpeed: Yup.string().required().label('Wind Speed'),
+    // windDirection: Yup.string().required().label('Wind Direction'),
+    // windConditions: Yup.string().required().label('Wind Conditions'),
 });
-
-const initialValues = {
-    aircraftType: '', pilotCertificate: '', otherInfo: '',
-    date: '', time: '', region: '', siteLocation: '', siteFamiliarity: '',
-    whatHappened: '', typeOfOccurance: '', degreeOfInjury: '', locationOfMainInjury: '', otherInjuryDetails: '', gliderDamage: '',
-    purposeOfFlight: '', phaseOfFlight: '',
-    helmet: '', harness: '', reserve: '',
-    windSpeed: '', windDirection: '', windConditions: '',
-    pilotExperience: ''
-};
-
-const reports = [
-    {
-        id: 1,
-        aircraftType: '',
-        pilotCertificate: '',
-        basicInformation: {
-            date: '',
-            time: '',
-            region: '',
-            siteLocation: '',
-            // siteRating: '',
-            siteFamiliarity: ''
-        },
-        reportSummary: {
-            whatHappened: '',
-            typeOfOccurance: '',
-            degreeOfInjury: '',
-            locationOfMainInjury: '',
-            otherInjuryDetails: '',
-            gliderDamage: ''
-        },
-        flightStage: {
-            purposeOfFlight: '',
-            phaseOfFlight: ''
-        },
-        equipment: {
-            helmet: '',
-            harness: '',
-            reserve: ''
-        },
-        weather: {
-            windSpeed: '',
-            windDirection: '',
-            windConditions: ''
-        },
-        pilotExperience: '',
-        otherInfo: ''
-    }
-];
 
 export default function AirsFormScreen() {
     const [flyingSites, setFlyingSites] = useState([]);
@@ -98,10 +52,25 @@ export default function AirsFormScreen() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
 
+    // Date & time 
+    const [date, setDate] = useState(new Date(new Date().getTime()));
+    const [mode, setMode] = useState('date');
+    const [show, setShow] = useState(false);
+
     useEffect(() => {
         fetchFlyingSites();
         fetchRegions();
     }, []);
+
+    const initialValues = {
+        aircraftType: '', pilotCertificate: '', otherInfo: '',
+        date: date.toDateString(), time: date.toTimeString(), region: '', siteLocation: '', siteFamiliarity: '',
+        whatHappened: '', typeOfOccurance: '', degreeOfInjury: '', locationOfMainInjury: '', otherInjuryDetails: '', gliderDamage: '',
+        purposeOfFlight: '', phaseOfFlight: '',
+        helmet: '', harness: '', reserve: '',
+        windSpeed: '', windDirection: '', windConditions: '',
+        pilotExperience: ''
+    };
 
     const fetchFlyingSites = async () => {
         setLoading(true);
@@ -118,8 +87,32 @@ export default function AirsFormScreen() {
     }
 
     const handleSubmit = (values) => {
+        values.date = date.toDateString();
+        values.time = date.toTimeString();
         console.log(values);
     }
+
+    const onChange = (event, selectedDate) => {
+        const currentDate = selectedDate || date;
+        // const currentDate = selectedDate;
+        setShow(Platform.OS === 'ios');
+        setDate(currentDate);
+        console.log('date selected: ', currentDate);
+    };
+
+    const showMode = (currentMode) => {
+        setShow(true);
+        setMode(currentMode);
+    };
+
+    const showDatepicker = () => {
+        showMode('date');
+    };
+
+    const showTimepicker = () => {
+        showMode('time');
+    };
+
 
     return (
         <Screen>
@@ -136,10 +129,27 @@ export default function AirsFormScreen() {
                     onSubmit={handleSubmit}
                 >
                     <AppText style={styles.sectionHeader}>Step 1 - Date, Time &amp; Location</AppText>
-                    <AppFormField param="date" placeholder="Date" iconName="calendar-month" />
-                    <AppFormField param="time" placeholder="Time of Incident" iconName="clock" />
-                    {/* <AppFormField param="region" placeholder="Region" iconName="map-marker-alert" /> */}
-                    <AppFormPicker items={regions} onChangeSelect={(item) => console.log(item)} />
+                    {/*==================================================================================*/}
+                    <TouchableWithoutFeedback onPress={showDatepicker}>
+                        <AppFormField
+                            editable={false}
+                            iconName="calendar-month"
+                            param="date"
+                            placeholder="Date of Incident"
+                            value={date.toDateString()}
+                        />
+                    </TouchableWithoutFeedback>
+                    <TouchableWithoutFeedback onPress={showTimepicker}>
+                        <AppFormField
+                            editable={false}
+                            iconName="clock"
+                            param="time"
+                            placeholder="Time of Incident"
+                            value={`${date.getHours()} : ${date.getUTCMinutes()}`}
+                        />
+                    </TouchableWithoutFeedback>
+                    <AppFormField param="region" placeholder="Region" iconName="map-marker-alert" />
+                    {/* <AppFormPicker items={regions} onChangeSelect={(item) => console.log(item)} /> */}
                     <AppFormField param="siteLocation" placeholder="Site Location" iconName="map-marker-alert" />
                     <AppFormField param="siteFamiliarity" placeholder="Site Familiarity" iconName="map-marker-alert" />
 
@@ -154,6 +164,17 @@ export default function AirsFormScreen() {
                     <AppFormButton />
                 </AppForm>
             </ScrollView>
+
+            {show && (
+                <DateTimePicker
+                    testID="dateTimePicker"
+                    value={date}
+                    mode={mode}
+                    is24Hour={true}
+                    display="default"
+                    onChange={onChange}
+                />
+            )}
         </Screen>
     )
 }
