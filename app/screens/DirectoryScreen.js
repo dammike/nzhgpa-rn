@@ -126,7 +126,7 @@ export default function DirectoryScreen() {
 
                     <FlatList style={{ height: Dimensions.get('window').height * .57 }}
                         data={filteredResults}
-                        keyExtractor={item => item.id.toString()}
+                        keyExtractor={item => item._id.toString()}
                         renderItem={({ item }) => (
                             <View>
                                 <ListItem

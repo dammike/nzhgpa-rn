@@ -2,7 +2,7 @@ import client from './client';
 
 const endpoint = '/feeds';
 const getFeeds = () => client.get(endpoint);
-const getFeedsBy = query => client.get(`${endpoint}/search?sortBy=${query}`);
+const getFeedsBy = searchQuery => client.get(`${endpoint}/search?sortBy=${searchQuery}`);
 
 export default {
     getFeeds,
