@@ -97,7 +97,6 @@ export default function AirsFormScreen() {
         const currentDate = selectedDate || date;
         setShow(Platform.OS === 'ios');
         setDate(currentDate);
-        console.log('date selected: ', currentDate);
     };
 
     const showMode = (currentMode) => {
@@ -120,7 +119,7 @@ export default function AirsFormScreen() {
                 <ListItem
                     image={require('../assets/profile.jpeg')}
                     title="Accident &amp; Incident Reporting System"
-                    description="AIRS helps pilots to be safe as a community. Your valuble input for logging in incidents help other pilots like you to be better aware of such situations and avoid them in the future."
+                    description="By creating a report you're saving someone from getting in trouble."
                     style={{ marginBottom: 10 }} />
 
                 <AppForm
@@ -136,7 +135,7 @@ export default function AirsFormScreen() {
                             iconName="calendar-month"
                             param="date"
                             placeholder="Date of Incident"
-                            value={date.toDateString()}
+                            value={moment(date).format('ddd - MMM DD YYYY')}
                             style={styles.dateTimePicker}
                         />
                     </TouchableWithoutFeedback>
@@ -146,7 +145,7 @@ export default function AirsFormScreen() {
                             iconName="clock"
                             param="time"
                             placeholder="Time of Incident"
-                            value={`${date.getHours()} : ${date.getUTCMinutes()}`}
+                            value={`${moment(date).format('LT')}`}
                             style={styles.dateTimePicker}
                         />
                     </TouchableWithoutFeedback>
