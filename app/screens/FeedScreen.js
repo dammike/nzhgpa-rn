@@ -41,6 +41,7 @@ export default function FeedScreen({ navigation }) {
     }, []);
 
     const fetchFeeds = async () => {
+        setLoading(true);
         const response = await feedsApi.getFeeds();
         if (!response.ok) {
             setLoading(false);
@@ -88,10 +89,8 @@ export default function FeedScreen({ navigation }) {
 
     return (
         <Screen>
-            {!feeds &&
-                <View style={styles.badConnection}>
-                    <AppText style={styles.badConnectionTxt}>Please check your network connection.</AppText>
-                </View>
+            {(!error && loading) &&
+                <ActivityLoader visible={loading} />
             }
             {feeds &&
                 <FlatList
@@ -144,16 +143,5 @@ const styles = StyleSheet.create({
     },
     headerPanelTxt: {
         fontSize: 16,
-    },
-    badConnection: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        textAlignVertical: 'center'
-    },
-    badConnectionTxt: {
-        color: colors.danger,
-        fontWeight: '500',
-        fontSize: 20,
     }
 })
