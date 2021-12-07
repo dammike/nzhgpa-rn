@@ -242,32 +242,31 @@ function SiteSearchScreen({ navigation }) {
 
 const styles = StyleSheet.create({
     flightOfTheDayContainer: {
+        alignItems: 'center',
         flex: 1,
         flexDirection: 'row',
-        // backgroundColor: 'yellow',
-        alignItems: 'center',
         justifyContent: 'space-between'
     },
     gloryTitle: {
         fontSize: 20,
     },
     gloryImage: {
-        width: '100%',
+        borderWidth: 1,
+        borderColor: colors.white,
         height: 200,
         resizeMode: 'contain',
-        borderColor: colors.white,
-        borderWidth: 1,
+        width: '100%'
     },
     headerBtnTitle: {
         fontSize: 14,
         fontWeight: 'bold',
-        paddingVertical: 10,
         marginRight: 8,
+        paddingVertical: 10
     },
     sortPanel: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
         alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'space-between'
     },
     sortBtns: {
         width: '50%'
@@ -276,8 +275,8 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     resultsContainer: {
-        marginBottom: 10,
         fontWeight: '800',
+        marginBottom: 10
     },
     results: {
         paddingHorizontal: 5,

@@ -16,6 +16,9 @@ export default function RetryConnection({ onPress }) {
 const styles = StyleSheet.create({
     retryPanel: {
         alignItems: 'center',
-        marginVertical: 18,
+        paddingTop: '10%',
+        position: 'absolute',
+        width: '100%',
+        zIndex: 1
     }
 })

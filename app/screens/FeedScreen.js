@@ -1,8 +1,7 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import React, { useState, useEffect } from 'react'
-import { Image, ImageBackground, ScrollView, StyleSheet, Text, View, FlatList, TouchableWithoutFeedback } from 'react-native'
+import { StyleSheet, View, FlatList } from 'react-native'
 import { Divider } from 'react-native-elements'
-import ActivityLoader from '../components/ActivityLoader';
 
 import AppFormPicker from '../components/AppFormPicker'
 import AppText from '../components/AppText'
@@ -11,6 +10,8 @@ import ListItem from '../components/ListItem'
 import Screen from '../components/Screen'
 import colors from '../config/colors'
 import feedsApi from '../api/feeds'
+import ActivityLoader from '../components/ActivityLoader';
+import RetryConnection from '../components/RetryConnection';
 
 const filterOptions = [
     { title: 'MOST POPULAR', value: 'popularity' },
@@ -86,13 +87,16 @@ export default function FeedScreen({ navigation }) {
         </View>
     );
 
-
     return (
         <Screen>
+            {error &&
+                <RetryConnection onPress={fetchFeeds} />
+            }
             {(!error && loading) &&
                 <ActivityLoader visible={loading} />
             }
             {feeds &&
+                <>
                 <FlatList
                     data={feeds}
                 keyExtractor={item => item._id.toString()}
@@ -111,8 +115,9 @@ export default function FeedScreen({ navigation }) {
                 refreshing={loading}
                 onRefresh={() => fetchFeeds()}
                 />
+                <Header />
+                </>
             }
-            <Header />
         </Screen>
     )
 }
