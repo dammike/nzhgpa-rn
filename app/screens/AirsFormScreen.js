@@ -12,6 +12,7 @@ import AppForm from '../components/AppForm'
 import ListItem from '../components/ListItem'
 import AppText from '../components/AppText'
 import flyingSitesApi from '../api/flyingSites';
+import airsApi from '../api/airs';
 import AppFormPicker from '../components/AppFormPicker'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import colors from '../config/colors';
@@ -88,8 +89,9 @@ export default function AirsFormScreen() {
     }
 
     const handleSubmit = (values) => {
-        values.date = date.toDateString();
-        values.time = date.toTimeString();
+        values.date = moment(date).format('YYYY-MM-DD');
+        values.time = moment(date).format('YYYY-MM-DD HH:mm:00');
+        airsApi.postAirs(values);
         console.log(values);
     }
 
