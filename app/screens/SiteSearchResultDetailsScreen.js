@@ -29,12 +29,17 @@ export default function SiteSearchResultDetailsScreen({ route }) {
     }, []);
 
     const parseDirectionString = () => {
-        if (site.weatherAndWindDirection.windDirections.length == 0) return;
-        let string = "";
-        site.weatherAndWindDirection.windDirections.map(direction => {
-            string += direction.label + ' - ' + direction.alias + '\n';
+        const directions = site.weatherAndWindDirection.windDirections;
+        if (directions.length == 0) return;
+        let buffer = "";
+        directions.map((direction, idx) => {
+            buffer += direction.label;
+            if (idx !== directions.length - 1)
+                buffer += ', ';
+            else
+                buffer += '.';
         });
-        setSiteDirectionString(string);
+        setSiteDirectionString(buffer);
     }
 
     const SiteInformation = () => (
@@ -167,7 +172,8 @@ export default function SiteSearchResultDetailsScreen({ route }) {
                 <ListItem style={styles.headerListItem}
                     image={require('../assets/profile.jpeg')}
                     title={site.name}
-                    description="Auckland, New Zealand(SW, SSW, NW)"
+                    subtitle={`${site.region}, New Zealand.`}
+                    description={`${siteDirectionString}`}
                 />
 
                 <View style={styles.sectionsContainer}>

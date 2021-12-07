@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
         color: colors.white,
         fontSize: 20,
         fontWeight: 'bold',
-        textTransform: 'uppercase',
+        textTransform: 'capitalize',
     },
     icon: {
         marginRight: 20,

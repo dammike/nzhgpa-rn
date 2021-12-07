@@ -7,8 +7,8 @@ import AppText from './AppText'
 export default function RetryConnection({ onPress }) {
     return (
         <View style={styles.retryPanel}>
-            <AppText>Couldn't retrieve the listings...</AppText>
-            <AppButton backgroundColor="tomato" iconName="reload-alert" title="Try Again" onPress={onPress} />
+            <AppText>Bad Reception. Please try again in a few minutes!</AppText>
+            <AppButton backgroundColor="tomato" iconName="cloud-refresh" title="Refresh!" onPress={onPress} />
         </View>
     )
 }

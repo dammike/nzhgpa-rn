@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Alert, Button, FlatList, Modal, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Button, Dimensions, FlatList, Modal, ScrollView, StyleSheet, View } from 'react-native';
 import { Divider } from 'react-native-elements';
 import moment from 'moment';
 
@@ -8,9 +8,7 @@ import Screen from '../components/Screen';
 import colors from '../config/colors';
 import airsApi from '../api/airs';
 import ListItem from '../components/ListItem';
-import ActivityLoader from '../components/ActivityLoader';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import AppText from '../components/AppText';
 import IconComponent from '../components/IconComponent';
 
 export default function AirsScreen({ navigation }) {
@@ -41,24 +39,22 @@ export default function AirsScreen({ navigation }) {
             <AppButton
                 iconName="format-color-highlight"
                 backgroundColor={colors.safe}
-                title="Post a Report"
+                title="New Report"
                 onPress={() => navigation.navigate('AirsForm')}
             />
-            {(!error && loading) &&
-                <ActivityLoader visible={loading} />
-            }
+
             <View style={styles.reportsContainer}>
-                <FlatList
+                <FlatList style={{ height: Dimensions.get('window').height * .67 }}
                     data={results}
                     keyExtractor={item => item._id.toString()}
-                    renderItem={({ item }) => (
+                    renderItem={({ item, index }) => (
                         <TouchableWithoutFeedback onPress={() => {
                             setModalVisible(true),
                                 setSelectedItem(item);
                         }}>
                             <View>
                                 <ListItem
-                                    title={item.region + ' (' + item.typeOfOccurance + ')'}
+                                    title={index + 1 + '. ' + item.region + ' (' + item.typeOfOccurance + ')'}
                                     description={
                                         'Date: ' + moment(item.date).format('DD-MM-YYYY')
                                         + ' / Time: ' + moment(item.time).format('HH : mm')
@@ -69,6 +65,8 @@ export default function AirsScreen({ navigation }) {
                         </TouchableWithoutFeedback>
                     )}
                     ItemSeparatorComponent={() => <Divider />}
+                    refreshing={loading}
+                    onRefresh={() => fetchResults()}
                 />
             </View>
 
@@ -76,10 +74,7 @@ export default function AirsScreen({ navigation }) {
                 animationType="slide"
                 // transparent={true}
                 visible={modalVisible}
-                onRequestClose={() => {
-                    Alert.alert('Modal has been closed.');
-                    setModalVisible(!modalVisible);
-                }}>
+                onRequestClose={() => setModalVisible(!modalVisible)}>
                 <Button onPress={() => setModalVisible(false)} title="Close" />
                 <ScrollView style={styles.scrollView} >
                     <View style={styles.summary}>
@@ -89,10 +84,8 @@ export default function AirsScreen({ navigation }) {
                                     title={selectedItem.region + ' ' + selectedItem.typeOfOccurance}
                                     description={
                                         'Date: ' + moment(selectedItem.date).format('DD-MM-YYYY') + ' / Time: ' + moment(selectedItem.time).format('HH : mm')}
-                                    IconComponent={<IconComponent name="bandage" />}
-                                    imageBgColor={colors.secondary}
+                                IconComponent={<IconComponent name="bandage" />}
                             />
-
                                 <ListItem title="Summary" description={selectedItem.whatHappened} />
                                 <ListItem title="Aircraft Type" description={selectedItem.aircraftType} />
                                 <ListItem title="Pilot Rating" description={selectedItem.pilotCertificate} />

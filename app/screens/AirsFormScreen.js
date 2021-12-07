@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Platform, ScrollView, StyleSheet, TextInput } from 'react-native'
+import { Platform, ScrollView, StyleSheet } from 'react-native'
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 import * as Yup from 'yup';
-import { useFormikContext } from 'formik';
 
 import Screen from '../components/Screen'
 import AppFormField from '../components/AppFormField'
@@ -13,6 +12,8 @@ import ListItem from '../components/ListItem'
 import AppText from '../components/AppText'
 import flyingSitesApi from '../api/flyingSites';
 import airsApi from '../api/airs';
+import RetryConnection from '../components/RetryConnection';
+import ActivityLoader from '../components/ActivityLoader';
 import AppFormPicker from '../components/AppFormPicker'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import colors from '../config/colors';
@@ -48,11 +49,12 @@ const validationSchema = Yup.object().shape({
     // windConditions: Yup.string().required().label('Wind Conditions'),
 });
 
-export default function AirsFormScreen() {
+export default function AirsFormScreen({ navigation }) {
     const [flyingSites, setFlyingSites] = useState([]);
     const [regions, setRegions] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
+    const [submitted, setSubmitted] = useState(false);
 
     // Date & time 
     const [date, setDate] = useState(new Date(new Date().getTime()));
@@ -62,6 +64,11 @@ export default function AirsFormScreen() {
     useEffect(() => {
         fetchFlyingSites();
         fetchRegions();
+
+        // clean up subscriptions on unmount.
+        return () => {
+            setLoading(false);
+        };
     }, []);
 
     const initialValues = {
@@ -88,11 +95,22 @@ export default function AirsFormScreen() {
         setRegions(response.data);
     }
 
-    const handleSubmit = (values) => {
+    const handleSubmit = async (values) => {
         values.date = moment(date).format('YYYY-MM-DD');
         values.time = moment(date).format('YYYY-MM-DD HH:mm:00');
-        airsApi.postAirs(values);
-        console.log(values);
+
+        setLoading(true);
+        const response = await airsApi.postAirs(values);
+        if (response.problem) { console.log(response.problem) }
+        if (!response.ok) {
+            setLoading(false);
+            return setError(true);
+        }
+        setLoading(false);
+        setError(false);
+        setSubmitted(true);
+
+        navigation.goBack();
     }
 
     const onChange = (event, selectedDate) => {
@@ -117,12 +135,19 @@ export default function AirsFormScreen() {
 
     return (
         <Screen>
-            <ScrollView showsVerticalScrollIndicator={false}>
-                <ListItem
-                    image={require('../assets/profile.jpeg')}
-                    title="Accident &amp; Incident Reporting System"
-                    description="By creating a report you're saving someone from getting in trouble."
-                    style={{ marginBottom: 10 }} />
+            {(!error && loading) &&
+                <ActivityLoader visible={loading} />
+            }
+            {error &&
+                <RetryConnection onPress={fetchFlyingSites} />
+            }
+            {!error &&
+                <ScrollView showsVerticalScrollIndicator={false}>
+                    <ListItem
+                        image={require('../assets/profile.jpeg')}
+                        title="Accident &amp; Incident Reporting System"
+                        description="By creating a report you're saving someone from getting in trouble."
+                        style={{ marginBottom: 10 }} />
 
                 <AppForm
                     validationSchema={validationSchema}
@@ -164,9 +189,10 @@ export default function AirsFormScreen() {
 
                     <AppText style={styles.sectionHeader}>Step 5 - Weather</AppText>
 
-                    <AppFormButton />
+                    {!submitted ? <AppFormButton /> : <AppText>Saved...</AppText>}
                 </AppForm>
             </ScrollView>
+            }
 
             {show && (
                 <DateTimePicker

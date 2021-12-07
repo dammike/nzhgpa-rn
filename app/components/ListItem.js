@@ -10,6 +10,7 @@ export default function ListItem({
     image,
     imageBgColor = colors.black,
     style,
+    subtitle,
     title }) {
 
     return (
@@ -31,11 +32,21 @@ export default function ListItem({
             <View style={styles.txtContainer}>
                 <AppText
                     numberOfLines={2}
-                    style={styles.title}>{title}</AppText>
+                    style={styles.title}>{title}
+                </AppText>
+
+                {subtitle &&
+                    <AppText
+                        numberOfLines={1}
+                        style={styles.subtitle}>{subtitle}
+                    </AppText>
+                }
+
                 {description &&
                     <AppText
-                        numberOfLines={4}
-                        style={styles.description}>{description}</AppText>
+                    numberOfLines={3}
+                    style={styles.description}>{description}
+                </AppText>
                 }
             </View>
         </View>
@@ -50,6 +61,11 @@ const styles = StyleSheet.create({
         fontSize: 20,
         textTransform: 'capitalize',
         fontWeight: 'bold',
+    },
+    subtitle: {
+        fontSize: 12,
+        fontWeight: '700',
+        textTransform: 'capitalize'
     },
     image: {
         width: '100%',
